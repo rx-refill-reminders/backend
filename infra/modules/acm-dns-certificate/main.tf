@@ -1,15 +1,8 @@
-module "tags" {
-  source = "../../lib/default-tags"
-  env    = var.env
-}
-
 resource "aws_acm_certificate" "certificate" {
   provider = aws.us_east_1
 
   domain_name       = var.domain_name
   validation_method = "DNS"
-
-  tags = module.tags
 
   lifecycle {
     create_before_destroy = true

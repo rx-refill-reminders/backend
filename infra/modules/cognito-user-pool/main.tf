@@ -1,8 +1,3 @@
-module "tags" {
-  source = "../default-tags"
-  env    = var.env
-}
-
 # Cognito User Pool - Core identity provider
 resource "aws_cognito_user_pool" "pool" {
   name = var.pool_name
@@ -94,8 +89,6 @@ resource "aws_cognito_user_pool" "pool" {
       post_authentication = try(var.lambda_trigger_arns.post_authentication, null)
     }
   }
-
-  tags = module.tags
 }
 
 # Resource Server - Defines your API as an OAuth resource

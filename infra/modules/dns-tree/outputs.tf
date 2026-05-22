@@ -13,12 +13,12 @@ output "name_servers" {
   value       = aws_route53_zone.zone.name_servers
 }
 
-output "web_certificate_arn" {
-  description = "ACM certificate ARN for the web domain"
-  value       = module.web_cert.certificate_arn
+output "root_certificate_arn" {
+  description = "ACM certificate ARN for the root domain"
+  value       = module.root_cert.certificate_arn
 }
 
-output "web_domain" {
+output "root_domain" {
   description = "Web domain name (root or dev subdomain)"
   value       = var.domain
 }

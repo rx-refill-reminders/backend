@@ -1,8 +1,3 @@
-module "tags" {
-  source = "../../lib/default-tags"
-  env    = var.env
-}
-
 locals {
   api_subdomain  = "api.${var.domain}"
   auth_subdomain = "auth.${var.domain}"
@@ -14,28 +9,25 @@ resource "aws_route53_zone" "zone" {
   tags = module.tags
 }
 
-module "web_cert" {
-  source = "../../lib/acm-dns-certificate"
+module "root_cert" {
+  source = "../acm-dns-certificate"
 
-  env         = var.env
-  domain_name = local.domain_name
+  domain_name = var.domain
   zone_id     = aws_route53_zone.zone.zone_id
   validate    = var.validate
 }
 
 module "api_cert" {
-  source = "../../lib/acm-dns-certificate"
+  source = "../acm-dns-certificate"
 
-  env         = var.env
   domain_name = local.api_subdomain
   zone_id     = aws_route53_zone.zone.zone_id
   validate    = var.validate
 }
 
 module "auth_cert" {
-  source = "../../lib/acm-dns-certificate"
+  source = "../acm-dns-certificate"
 
-  env         = var.env
   domain_name = local.auth_subdomain
   zone_id     = aws_route53_zone.zone.zone_id
   validate    = var.validate
