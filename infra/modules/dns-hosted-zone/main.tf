@@ -29,6 +29,16 @@ moved {
   to   = module.acm_cert
 }
 
+moved {
+  from = module.api_cert
+  to   = null
+}
+
+moved {
+  from = module.auth_cert
+  to   = null
+}
+
 module "acm_cert" {
   source = "../dns-acm-certificate"
 
