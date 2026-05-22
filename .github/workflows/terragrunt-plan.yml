@@ -62,6 +62,8 @@ jobs:
       -
         name: terragrunt plan
         uses: gruntwork-io/terragrunt-action@v3
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
         with:
           tg_version: ${{ steps.tg-install.outputs.terragrunt-version }}
           tf_path: ${{ steps.tg-install.outputs.terraform-path }}
