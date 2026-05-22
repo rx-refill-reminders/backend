@@ -65,4 +65,3 @@ jobs:
         with:
           working-directory: ${{ inputs.STACKS_DIR }}/${{ matrix.STACK }}
           command: stack run apply --log-format bare
-          pr_comment: true
