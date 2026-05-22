@@ -59,8 +59,13 @@ jobs:
           role-to-assume: ${{ steps.stack-info.outputs.assume-role-arn }}
           aws-region: us-east-1
       -
+        name: Log stack info
+        run: |
+          echo "AWS account: ${{ steps.stack-info.outputs.aws-account-id }}"
+          echo "State bucket: ${{ steps.stack-info.outputs.states-bucket }}"
+      -
         name: terragrunt plan
         id: plan
         working-directory: ${{ inputs.STACKS_DIR }}/${{ matrix.STACK }}
         run: |
-          terragrunt plan
+          terragrunt run --all plan --non-interactive

@@ -1,1 +1,0 @@
-{"Modules":[{"Key":"","Source":"","Dir":"."},{"Key":"api_cert","Source":"../../lib/acm-dns-certificate","Dir":""},{"Key":"auth_cert","Source":"../../lib/acm-dns-certificate","Dir":""},{"Key":"tags","Source":"../../lib/default-tags","Dir":""},{"Key":"web_cert","Source":"../../lib/acm-dns-certificate","Dir":""}]}

@@ -264,8 +264,6 @@ resource "aws_secretsmanager_secret" "service_client_secret" {
 
   name        = "${var.pool_name}-service-client-secret"
   description = "Service client secret for ${var.pool_name}"
-
-  tags = module.tags
 }
 
 resource "aws_secretsmanager_secret_version" "service_client_secret" {

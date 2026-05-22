@@ -13,6 +13,9 @@ outputs:
   assume-role-arn:
     description: Worker role to assume
     value: ${{ steps.parse-stack-yml.outputs.assume-role-arn }}
+  states-bucket:
+    description: S3 bucket for Terraform remote state
+    value: ${{ steps.parse-stack-yml.outputs.states-bucket }}
 
 runs:
   using: composite
@@ -30,3 +33,6 @@ runs:
         
         ASSUME_ROLE_ARN=$(cat "$INFO_FILE" | yq '.["assume-role-arn"]')
         echo "assume-role-arn=$ASSUME_ROLE_ARN" | tee -a "$GITHUB_OUTPUT"
+
+        STATES_BUCKET=$(cat "$INFO_FILE" | yq '.["states-bucket"]')
+        echo "states-bucket=$STATES_BUCKET" | tee -a "$GITHUB_OUTPUT"
