@@ -5,7 +5,7 @@ module "tags" {
 
 # Cognito User Pool - Core identity provider
 resource "aws_cognito_user_pool" "pool" {
-  name = "${var.pool_name}-${var.env}"
+  name = var.pool_name
 
   # Allow users to sign themselves up
   auto_verified_attributes = ["email"]
@@ -101,7 +101,7 @@ resource "aws_cognito_user_pool" "pool" {
 # Resource Server - Defines your API as an OAuth resource
 resource "aws_cognito_resource_server" "api" {
   identifier   = var.resource_server_identifier
-  name         = "${var.resource_server_name}-${var.env}"
+  name         = var.resource_server_name
   user_pool_id = aws_cognito_user_pool.pool.id
 
   # Define custom scopes
@@ -116,7 +116,7 @@ resource "aws_cognito_resource_server" "api" {
 
 # iOS App Client - For user authentication
 resource "aws_cognito_user_pool_client" "ios_app" {
-  name         = "${var.app_client_name}-ios-${var.env}"
+  name         = "${var.app_client_name}-ios"
   user_pool_id = aws_cognito_user_pool.pool.id
 
   # OAuth settings
@@ -179,7 +179,7 @@ resource "aws_cognito_user_pool_client" "ios_app" {
 resource "aws_cognito_user_pool_client" "web_app" {
   count = var.enable_web_client ? 1 : 0
 
-  name         = "${var.app_client_name}-web-${var.env}"
+  name         = "${var.app_client_name}-web"
   user_pool_id = aws_cognito_user_pool.pool.id
 
   # OAuth settings
@@ -242,7 +242,7 @@ resource "aws_cognito_user_pool_client" "web_app" {
 resource "aws_cognito_user_pool_client" "service" {
   count = var.enable_service_client ? 1 : 0
 
-  name         = "${var.app_client_name}-service-${var.env}"
+  name         = "${var.app_client_name}-service"
   user_pool_id = aws_cognito_user_pool.pool.id
 
   # OAuth settings for client credentials flow
@@ -269,8 +269,8 @@ resource "aws_cognito_user_pool_client" "service" {
 resource "aws_secretsmanager_secret" "service_client_secret" {
   count = var.enable_service_client ? 1 : 0
 
-  name        = "${var.pool_name}-${var.env}-service-client-secret"
-  description = "Service client secret for ${var.pool_name} ${var.env} environment"
+  name        = "${var.pool_name}-service-client-secret"
+  description = "Service client secret for ${var.pool_name}"
 
   tags = module.tags
 }

@@ -1,32 +1,20 @@
-variable "env" {
-  description = "Environment: dev, prod, or common"
-  type        = string
-
-  validation {
-    condition     = contains(["dev", "prod", "common"], var.env)
-    error_message = "The value of \"env\" must be either \"dev\", \"prod\", or \"common\""
-  }
-}
-
 variable "pool_name" {
   description = "Base name for the Cognito User Pool"
   type        = string
-  default     = "wanderertrip"
 }
 
 variable "domain_prefix" {
   description = "Domain prefix for Cognito Hosted UI (will be suffixed with -env)"
   type        = string
-  default     = "wanderertrip"
 }
 
 # Custom Domain Configuration
 variable "domain_alias" {
   description = "Custom domain configuration for Cognito Hosted UI. If provided, uses custom domain instead of default Cognito domain."
   type = object({
-    domain_name     = string # e.g., "auth.wanderertrip.com"
-    certificate_arn = string # ACM certificate ARN (must be in us-east-1)
-    zone_id         = string # Route53 hosted zone ID for creating alias record
+    domain_name     = string
+    certificate_arn = string
+    zone_id         = string
   })
   default = null
 }
@@ -34,19 +22,16 @@ variable "domain_alias" {
 variable "app_client_name" {
   description = "Base name for app clients"
   type        = string
-  default     = "wanderertrip"
 }
 
 variable "resource_server_identifier" {
   description = "Identifier for the API resource server (typically your API URL)"
   type        = string
-  default     = "https://api.wanderertrip.com"
 }
 
 variable "resource_server_name" {
   description = "Name for the resource server"
   type        = string
-  default     = "WandererTrip API"
 }
 
 variable "resource_server_scopes" {
@@ -55,12 +40,6 @@ variable "resource_server_scopes" {
     name        = string
     description = string
   }))
-  default = [
-    {
-      name        = "access"
-      description = "Access to WandererTrip API"
-    }
-  ]
 }
 
 variable "ios_callback_urls" {

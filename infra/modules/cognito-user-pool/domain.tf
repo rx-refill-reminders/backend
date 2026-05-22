@@ -1,7 +1,7 @@
 data "aws_region" "current" {}
 
 locals {
-  default_domain_prefix    = "${var.domain_prefix}-${var.env}"
+  default_domain_prefix    = "${var.domain_prefix}"
   default_cognito_hostname = "${local.default_domain_prefix}.auth.${data.aws_region.current.region}.amazoncognito.com"
 
   cognito_hostname = var.domain_alias == null ? local.default_cognito_hostname : var.domain_alias.domain_name
