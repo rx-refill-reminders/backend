@@ -5,14 +5,20 @@ locals {
 
 import {
   for_each = var.import_hosted_zone_id == null ? tomap({}) : tomap({ root : var.import_hosted_zone_id })
-  to       = aws_route53_zone.zone
+  to       = aws_route53_zone.zone[each.key]
   identity = {
     zone_id = each.value
   }
 }
 
+moved {
+  from = aws_route53_zone.zone
+  to   = aws_route53_zone.zone["root"]
+}
+
 resource "aws_route53_zone" "zone" {
-  name = var.domain
+  for_each = tomap({ root : "" })
+  name     = var.domain
 }
 
 module "root_cert" {
