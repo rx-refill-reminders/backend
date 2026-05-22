@@ -1,0 +1,102 @@
+name: Build Terragrunt Matrix
+description: Build a matrix of Terragrunt stacks to plan
+
+inputs:
+  modules-dirs:
+    description: YAML directory list
+    required: true
+  stacks-dir:
+    description: Stacks directory
+
+outputs:
+  modules-changed:
+    description: True if any module was changed
+    value: ${{ steps.final-outputs.outputs.modules-changed }}
+  stacks-changed:
+    description: JSON array of all changed stacks
+    value: ${{ steps.final-outputs.outputs.stacks-changed }}
+
+runs:
+  using: composite
+  steps:
+    -
+      shell: bash
+      id: module-path-filters
+      env:
+        MODULES_DIRS: ${{ inputs.modules-dirs }}
+      run: |
+        # Build module path filters
+
+        MODULE_PATH_FILTERS=$(${{ github.action_path }}/generate-module-filters.sh)
+
+        echo "::group::Module path filters"
+        echo "$MODULE_PATH_FILTERS"
+        echo "::endgroup::"
+
+        echo 'filters<<EOF' >> $GITHUB_OUTPUT
+        echo "$MODULE_PATH_FILTERS" >> $GITHUB_OUTPUT
+        echo 'EOF' >> $GITHUB_OUTPUT
+    -
+      shell: bash
+      id: stack-path-filters
+      env:
+        STACKS_DIR: ${{ inputs.stacks-dir }}
+      run: |
+        # Build stack path filters
+
+        STACK_PATH_FILTERS=$(${{ github.action_path }}/generate-stack-filters.sh)
+
+        echo "::group::Stack path filters"
+        echo "$STACK_PATH_FILTERS"
+        echo "::endgroup::"
+
+        echo 'filters<<EOF' >> $GITHUB_OUTPUT
+        echo "$STACK_PATH_FILTERS" >> $GITHUB_OUTPUT
+        echo 'EOF' >> $GITHUB_OUTPUT
+
+    -
+      shell: bash
+      id: list-all-stacks
+      env:
+        STACK_PATH_FILTERS: ${{ steps.stack-path-filters.outputs.filters }}
+      run: |
+        ALL_STACKS=$(echo "$STACK_PATH_FILTERS" | yq -o json -I0 'keys')
+
+        echo "::group::All stacks"
+        echo "$ALL_STACKS"
+        echo "::endgroup::"
+
+        echo "all-stacks=$ALL_STACKS" >> "$GITHUB_OUTPUT"
+    -
+      name: Detect module changes
+      uses: dorny/paths-filter@v4
+      id: module-changes
+      with:
+        filters: ${{ steps.module-path-filters.outputs.filters }}
+    -
+      name: Detect stack changes
+      uses: dorny/paths-filter@v4
+      id: stack-changes
+      with:
+        filters: ${{ steps.stack-path-filters.outputs.filters }}
+    -
+      name: Final outputs
+      id: final-outputs
+      shell: bash
+      env:
+        MODULE_CHANGES: ${{ steps.module-changes.outputs.changes }}
+        STACK_CHANGES: ${{ steps.stack-changes.outputs.changes }}
+        ALL_STACKS: ${{ steps.list-all-stacks.outputs.all-stacks }}
+      run: |
+        echo "::group::Final outputs"
+
+        HAS_MODULE_CHANGES=$(jq -nrc --argjson changes "$MODULE_CHANGES" '($changes | length) > 0')
+        if [[ "$HAS_MODULE_CHANGES" == "true" ]]; then
+          echo "modules-changed=true" | tee -a "$GITHUB_OUTPUT"
+          echo "stacks-changed=$ALL_STACKS" | tee -a "$GITHUB_OUTPUT"
+        else
+          echo "modules-changed=false" | tee -a "$GITHUB_OUTPUT"
+          echo "stacks-changed=$STACK_CHANGES" | tee -a "$GITHUB_OUTPUT"
+        fi
+
+        echo "::endgroup::"

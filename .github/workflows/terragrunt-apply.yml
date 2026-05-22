@@ -1,0 +1,66 @@
+name: terragrunt-apply
+
+on:
+
+  workflow_call:
+    inputs:
+      TERRAGRUNT_VERSION:
+        required: true
+        type: string
+      TERRAFORM_VERSION:
+        required: true
+        type: string
+      STACKS_DIR:
+        required: true
+        type: string
+      STACKS:
+        required: false
+        type: string
+        description: 'JSON array of stacks to plan'
+        default: '[]'
+
+permissions:
+  contents: read
+  id-token: write
+  pull-requests: read
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+
+  apply:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        STACK: ${{ fromJSON(inputs.STACKS) }}
+    name: ${{ matrix.STACK }}
+    steps:
+      -
+        uses: actions/checkout@v6
+      -
+        name: Install Terraform & Terragrunt
+        uses: ./.github/actions/tg-install
+        with:
+          terraform-version: ${{ inputs.TERRAFORM_VERSION }}
+          terragrunt-version: ${{ inputs.TERRAGRUNT_VERSION }}
+      -
+        name: Get stack info
+        id: stack-info
+        uses: ./.github/actions/tg-stack-info
+        with:
+          INFO_FILE: ${{ inputs.STACKS_DIR }}/${{ matrix.STACK }}/stack.yml
+      -
+        name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v6
+        with:
+          role-to-assume: ${{ steps.stack-info.outputs.assume-role-arn }}
+          aws-region: us-east-1
+      -
+        name: terragrunt apply
+        id: apply
+        working-directory: ${{ inputs.STACKS_DIR }}/${{ matrix.STACK }}
+        run: |
+          terragrunt run --all apply --non-interactive
