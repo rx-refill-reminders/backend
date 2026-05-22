@@ -117,7 +117,13 @@ runs:
               console.log(`Created ${readmePath}`);
             }
           }
-
+    -
+      name: Generate docs for Terraform modules
+      uses: terraform-docs/gh-actions@v1.4.1
+      with:
+        recursive: true
+        working-dir: ${{ inputs.tf-modules-dir }}
+        recursive-path: .
     -
       name: Detect changes
       id: detect-changes
