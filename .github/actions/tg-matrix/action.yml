@@ -27,7 +27,7 @@ runs:
       run: |
         echo "::group::Module path filters"
 
-        MODULE_PATH_FILTERS=$($GITHUB_ACTION_PATH/generate-module-filters.sh)
+        MODULE_PATH_FILTERS=$(${{ github.action_path }}/generate-module-filters.sh)
         echo "$MODULE_PATH_FILTERS"
 
         echo 'filters<<EOF' >> $GITHUB_OUTPUT
@@ -43,7 +43,7 @@ runs:
       run: |
         echo "::group::Stack path filters"
 
-        STACK_PATH_FILTERS=$($GITHUB_ACTION_PATH/generate-stack.filters.sh)
+        STACK_PATH_FILTERS=$(${{ github.action_path }}/generate-stack.filters.sh)
         echo "$STACK_PATH_FILTERS"
 
         echo 'filters<<EOF' >> $GITHUB_OUTPUT
