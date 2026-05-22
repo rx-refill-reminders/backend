@@ -1,0 +1,56 @@
+name: pr
+
+on:
+  pull_request:
+
+permissions:
+  contents: write
+  id-token: write
+  pull-requests: write
+
+defaults:
+  run:
+    shell: bash
+
+concurrency:
+  group: ${{ github.ref }}-${{ github.workflow }}
+  cancel-in-progress: true
+
+jobs:
+
+  detect-changes:
+    runs-on: ubuntu-latest
+    outputs:
+      infra-changed: ${{ steps.paths-filter.outputs.infra-changed }}
+    steps:
+      -
+        uses: actions/checkout@v6
+      -
+        name: Detect changes
+        uses: dorny/paths-filter@v4
+        id: paths-filter
+        with:
+          filters: |
+            infra:
+              - 'infra/**'
+
+  check-infra:
+    needs: detect-changes
+    if: ${{ needs.detect-changes.outputs.infra-changed == 'true' }}
+    uses: ./.github/workflows/check-infra.yml
+    secrets: inherit
+
+  pr-ready:
+    if: ${{ always() }}
+    needs: 
+      - detect-changes
+      - check-infra
+    runs-on: ubuntu-latest
+    steps:
+      -
+        uses: actions/checkout@v6
+      -
+        name: Emit PR ready check
+        uses: ./.github/actions/pr-ready
+        with:
+          needs: ${{ toJSON(needs) }}
