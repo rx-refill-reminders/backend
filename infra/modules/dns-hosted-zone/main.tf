@@ -32,37 +32,37 @@ moved {
 module "acm_cert" {
   source = "../dns-acm-certificate"
 
-  providers = {
-    aws.us_east_1 = aws.us_east_1
-  }
-
   domain_name = var.domain
   zone_id     = local.root_zone_id
   validate    = var.validate
+
+  providers = {
+    aws.us_east_1 = aws.us_east_1
+  }
 }
 
 module "api_cert" {
   source = "../dns-acm-certificate"
 
-  providers = {
-    aws.us_east_1 = aws.us_east_1
-  }
-
   domain_name = local.api_subdomain
   zone_id     = local.root_zone_id
   validate    = false
+
+  providers = {
+    aws.us_east_1 = aws.us_east_1
+  }
 }
 
 module "auth_cert" {
   source = "../dns-acm-certificate"
 
-  providers = {
-    aws.us_east_1 = aws.us_east_1
-  }
-
   domain_name = local.auth_subdomain
   zone_id     = local.root_zone_id
   validate    = false
+
+  providers = {
+    aws.us_east_1 = aws.us_east_1
+  }
 }
 
 resource "aws_route53_record" "delegated" {
