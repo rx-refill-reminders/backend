@@ -37,7 +37,8 @@ module "acm_cert" {
   validate    = var.validate
 
   providers = {
-    aws = aws.us_east_1
+    aws.default   = aws
+    aws.us_east_1 = aws.us_east_1
   }
 }
 
