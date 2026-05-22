@@ -25,32 +25,35 @@ runs:
       env:
         MODULES_DIRS: ${{ inputs.modules-dirs }}
       run: |
-        echo "::group::Module path filters"
+        # Build module path filters
 
         MODULE_PATH_FILTERS=$(${{ github.action_path }}/generate-module-filters.sh)
+
+        echo "::group::Module path filters"
         echo "$MODULE_PATH_FILTERS"
+        echo "::endgroup::"
 
         echo 'filters<<EOF' >> $GITHUB_OUTPUT
         echo "$MODULE_PATH_FILTERS" >> $GITHUB_OUTPUT
         echo 'EOF' >> $GITHUB_OUTPUT
-
-        echo "::endgroup::"
     -
       shell: bash
       id: stack-path-filters
       env:
         STACKS_DIR: ${{ inputs.stacks-dir }}
       run: |
+        # Build stack path filters
+
+        STACK_PATH_FILTERS=$(${{ github.action_path }}/generate-stack-filters.sh)
         echo "::group::Stack path filters"
 
-        STACK_PATH_FILTERS=$(${{ github.action_path }}/generate-stack.filters.sh)
         echo "$STACK_PATH_FILTERS"
+        echo "::endgroup::"
 
         echo 'filters<<EOF' >> $GITHUB_OUTPUT
         echo "$STACK_PATH_FILTERS" >> $GITHUB_OUTPUT
         echo 'EOF' >> $GITHUB_OUTPUT
 
-        echo "::endgroup::"
     -
       shell: bash
       id: list-all-stacks
