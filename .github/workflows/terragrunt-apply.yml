@@ -63,4 +63,6 @@ jobs:
         id: apply
         working-directory: ${{ inputs.STACKS_DIR }}/${{ matrix.STACK }}
         run: |
-          terragrunt run --all apply --non-interactive
+          terragrunt stack run apply \
+            --non-interactive \
+            --log-format bare
