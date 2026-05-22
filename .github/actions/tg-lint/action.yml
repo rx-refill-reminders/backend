@@ -83,7 +83,7 @@ runs:
       id: module-paths
       shell: bash
       env:
-        MODULES_DIR: ${{ inputs.modules-dir }}
+        MODULES_DIR: ${{ inputs.tf-modules-dir }}
       run: |
         # List all Terraform modules
 
