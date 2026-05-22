@@ -6,9 +6,7 @@ locals {
 import {
   for_each = var.import_hosted_zone_id == null ? tomap({}) : tomap({ root : var.import_hosted_zone_id })
   to       = aws_route53_zone.zone[each.key]
-  identity = {
-    zone_id = each.value
-  }
+  id       = each.value
 }
 
 moved {
