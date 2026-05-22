@@ -29,6 +29,20 @@ moved {
   to   = module.acm_cert
 }
 
+removed {
+  from = module.api_cert
+  lifecycle {
+    destroy = true
+  }
+}
+
+removed {
+  from = module.auth_cert
+  lifecycle {
+    destroy = true
+  }
+}
+
 module "acm_cert" {
   source = "../dns-acm-certificate"
 
