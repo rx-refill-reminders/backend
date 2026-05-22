@@ -79,8 +79,8 @@ jobs:
         name: Install Terraform & Terragrunt
         uses: ./.github/actions/tg-install
         with:
-          TERRAFORM_VERSION: ${{ inputs.TERRAFORM_VERSION }}
-          TERRAGRUNT_VERSION: ${{ inputs.TERRAGRUNT_VERSION }}
+          terraform-version: ${{ inputs.TERRAFORM_VERSION }}
+          terragrunt-version: ${{ inputs.TERRAGRUNT_VERSION }}
       -
         name: Format Terraform files
         working-directory: ${{ inputs.MODULES_DIR }}
