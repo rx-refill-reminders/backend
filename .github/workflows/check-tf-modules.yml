@@ -3,6 +3,12 @@ name: check-tf-modules
 on:
   workflow_call:
     inputs:
+      TERRAGRUNT_VERSION:
+        required: true
+        type: string
+      TERRAFORM_VERSION:
+        required: true
+        type: string
       WORKING_DIR:
         required: true
         type: string
@@ -66,10 +72,23 @@ jobs:
         with:
           token: ${{ steps.fetch-app-token.outputs.token || github.token }}
       -
-        name: Install Terragrunt and Terraform
+        name: Install Terraform
+        uses: hashicorp/setup-terraform@v4
+        with:
+          terraform_version: ${{ inputs.TERRAFORM_VERSION }}
+          terraform_wrapper: false
+      -
+        name: Identify Terraform path
+        id: tf-path
+        run: |
+          TERRAFORM_BINARY=$(command -v terraform)
+          echo "path=$TERRAFORM_BINARY" | tee -a "$GITHUB_OUTPUT"
+      -
+        name: Install Terragrunt
         uses: gruntwork-io/terragrunt-action@v3
         with:
-          tg_dir: ${{ inputs.WORKING_DIR }}
+          tg_version: ${{ inputs.TERRAGRUNT_VERSION }}
+          tf_path: ${{ steps.tf-path.outputs.path }}
       -
         name: Validate Terragrunt files
         uses: gruntwork-io/terragrunt-action@v3
