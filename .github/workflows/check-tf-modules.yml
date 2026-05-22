@@ -9,14 +9,18 @@ on:
       TERRAFORM_VERSION:
         required: true
         type: string
-      WORKING_DIR:
-        required: true
-        type: string
-        description: The working directory
       MODULES_DIR:
         required: true
         type: string
         description: The directory to search within for Terraform modules
+      UNITS_DIR:
+        required: true
+        type: string
+        description: The directory to search within for Terragrunt units
+      STACKS_DIR:
+        required: true
+        type: string
+        description: The directory to search within for Terragrunt stacks
     secrets:
       GH_APP_CLIENT_ID:
         description: If specified, git commands will be performed by this app, instead of the caller
@@ -79,21 +83,26 @@ jobs:
           TERRAGRUNT_VERSION: ${{ inputs.TERRAGRUNT_VERSION }}
       -
         name: Format Terraform files
-        working-directory: ${{ inputs.WORKING_DIR }}
+        working-directory: ${{ inputs.MODULES_DIR }}
         run: |
           terraform fmt -recursive
       -
-        name: Validate Terragrunt files
-        working-directory: ${{ inputs.WORKING_DIR }}
+        name: Validate Terragrunt stacks
+        working-directory: ${{ inputs.STACKS_DIR }}
         run: |
           terragrunt hcl validate --inputs --strict
       -
-        name: Format Terragrunt files
-        working-directory: ${{ inputs.WORKING_DIR }}
+        name: Format Terragrunt stack files
+        working-directory: ${{ inputs.STACKS_DIR }}
         run: |
           terragrunt hcl fmt
       -
-        name: List all directories with *.tf files
+        name: Format Terragrunt unit files
+        working-directory: ${{ inputs.UNITS_DIR }}
+        run: |
+          terragrunt hcl fmt
+      -
+        name: List all module directories
         id: module-paths
         env:
           MODULES_DIR: ${{ inputs.MODULES_DIR }}
