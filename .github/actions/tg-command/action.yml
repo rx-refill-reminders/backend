@@ -68,7 +68,7 @@ runs:
           const actionOutput = process.env.TG_ACTION_OUTPUT.replaceAll('%0A', '\n');
 
           const commentLines = [
-            `### ${outcomeEmoji} terragrunt execution in \`${process.env.TG_DIR}\` ${outcome}`,
+            `### ${outcomeEmoji} terragrunt execution in ${process.env.TG_DIR} ${outcome}`,
             '',
             `Command: \`terragrunt ${process.env.TG_COMMAND}\``,
             '',
