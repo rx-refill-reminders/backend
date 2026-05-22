@@ -26,7 +26,7 @@ locals {
 
 moved {
   from = module.root_cert
-  to = module.acm_cert
+  to   = module.acm_cert
 }
 
 module "acm_cert" {
