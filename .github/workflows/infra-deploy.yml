@@ -1,4 +1,4 @@
-name: deploy-infra
+name: infra-deploy
 
 on:
   push:
@@ -33,7 +33,7 @@ jobs:
           modules-dirs: |
             - infra/modules
             - infra/units
-          STACKS_DIR: infra/stacks
+          stacks-dir: infra/stacks
 
   deploy:
     needs: detect-changes

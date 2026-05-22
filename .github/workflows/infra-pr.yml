@@ -1,4 +1,4 @@
-name: pr-infra
+name: infra-pr
 
 on:
   pull_request:
