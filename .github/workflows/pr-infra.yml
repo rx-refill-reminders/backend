@@ -26,3 +26,14 @@ jobs:
     secrets:
       GH_APP_CLIENT_ID: ${{ secrets.WRITER_APP_CLIENT_ID }}
       GH_APP_PRIVATE_KEY: ${{ secrets.WRITER_APP_PRIVATE_KEY }}
+
+  pr-ready:
+    needs: 
+      - lint
+    runs-on: ubuntu-latest
+    steps:
+      -
+        name: Emit PR ready check
+        uses: ./.github/actions/pr-ready
+        with:
+          needs: ${{ fromJSON(needs) }}
