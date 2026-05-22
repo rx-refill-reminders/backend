@@ -42,3 +42,10 @@ runs:
       with:
         tg_version: ${{ inputs.terragrunt-version }}
         tf_path: ${{ steps.tf-path.outputs.path }}
+    -
+      name: Persist inputs for future calls
+      shell: bash
+      run: |
+        # Persist inputs for future calls
+        echo "TG_INSTALL_TG_VERSION=${{ inputs.terragrunt-version }}" >> "$GITHUB_ENV"
+        echo "TG_INSTALL_TF_PATH=${{ steps.tf-path.outputs.path }}" >> "$GITHUB_ENV"

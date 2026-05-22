@@ -1,0 +1,113 @@
+name: Execute Terragrunt
+description: ""
+
+inputs:
+  working-directory:
+    description: The directory to run the command from
+    required: true
+  command:
+    description: The command to run
+    required: true
+  pr-comment:
+    description: Set to true to comment on the PR
+    required: false
+    default: 'false'
+
+runs:
+  using: composite
+  steps:
+    -
+      name: Check for required variables
+      shell: bash
+      run: |
+        # Check for required environment variables
+
+        if [[ -z "$TG_INSTALL_TG_VERSION" ]]; then
+          >&2 echo "Environment variable missing: TG_INSTALL_TG_VERSION"
+          exit 1
+        fi
+
+        if [[ -z "$TG_INSTALL_TF_PATH" ]]; then
+          >&2 echo "Environment variable missing: TG_INSTALL_TF_PATH"
+          exit 1
+        fi
+    -
+      name: Execute command
+      id: terragrunt
+      uses: gruntwork-io/terragrunt-action@v3
+      with:
+        tg_version: ${{ env.TG_INSTALL_TG_VERSION }}
+        tf_path: ${{ env.TG_INSTALL_TF_PATH }}
+        tg_dir: ${{ inputs.working-directory }}
+        tg_command: ${{ inputs.command }}
+        tg_comment: 0
+        tg_output_capture: 1
+    -
+      name: Parse result
+      id: parse-result
+      if: ${{ !cancelled() }}
+      uses: actions/github-script@v7
+      env:
+        TG_DIR: ${{ inputs.working-directory }}
+        TG_COMMAND: ${{ inputs.command }}
+        TG_ACTION_EXIT_CODE: ${{ steps.terragrunt.outputs.tg_action_exit_code }}
+        TG_ACTION_OUTPUT: ${{ steps.terragrunt.outputs.tg_action_output }}
+      with:
+        script: |
+          const succeeded = process.env.TG_ACTION_EXIT_CODE == '0';
+
+          let outcome, outcomeEmoji;
+          if (succeeded) {
+            outcome = 'succeeded';
+            outcomeEmoji = '✅';
+          } else {
+            outcome = 'failed';
+            outcomeEmoji = '❌';
+          }
+
+          const commentLines = [
+            `### ${outcomeEmoji} Terragrunt execution in ${process.env.TG_DIR} ${outcome}`,
+            '',
+            `Command: \`terragrunt ${process.env.TG_COMMAND}\``,
+            '',
+          ]
+
+          if (succeeded) {
+            let planOverview;
+            if (process.env.TG_ACTION_OUTPUT.includes('No changes. Your infrastructure matches the configuration.')) {
+              planOverview = 'No changes'
+            } else {
+              const matches = process.env.TG_ACTION_OUTPUT.match(/Plan: (?<plan>.+)/);
+
+              if (matches) {
+                planOverview = matches.groups.plan;
+              } else {
+                core.warning('Failed to parse plan overview')
+              }
+            }
+
+            if (planOverview) {
+              commentLines.push(
+                `Overview: ${planOverview}`,
+                '',
+              );
+            }
+          }
+
+          commentLines.push(
+            '```terraform',
+            process.env.TG_ACTION_OUTPUT,
+            '```',
+          )
+
+          core.setOutput('comment-body', commentLines.join('\n'));
+    -
+      name: Comment outcome
+      uses: marocchino/sticky-pull-request-comment@v3
+      if: |
+        !cancelled() &&
+        inputs.pr-comment == 'true'
+      with:
+        recreate: true
+        header: tg-command-${{ inputs.working-directory }}
+        message: ${{ steps.parse-result.outputs.comment-body }}

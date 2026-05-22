@@ -61,12 +61,8 @@ jobs:
           aws-region: us-east-1
       -
         name: terragrunt plan
-        uses: gruntwork-io/terragrunt-action@v3
-        env:
-          GITHUB_TOKEN: ${{ github.token }}
+        uses: ./.github/actions/tg-command
         with:
-          tg_version: ${{ steps.tg-install.outputs.terragrunt-version }}
-          tf_path: ${{ steps.tg-install.outputs.terraform-path }}
-          tg_comment: 1
-          tg_dir: ${{ inputs.STACKS_DIR }}/${{ matrix.STACK }}
-          tg_command: stack run plan --log-format bare
+          working-directory: ${{ inputs.STACKS_DIR }}/${{ matrix.STACK }}
+          command: stack run plan --log-format bare
+          pr_comment: true
