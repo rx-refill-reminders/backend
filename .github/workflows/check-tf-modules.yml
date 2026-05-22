@@ -90,10 +90,15 @@ jobs:
           tg_version: ${{ inputs.TERRAGRUNT_VERSION }}
           tf_path: ${{ steps.tf-path.outputs.path }}
       -
+        name: Format Terraform files
+        working-directory: ${{ inputs.WORKING_DIR }}
+        run: |
+          terraform fmt -recursive
+      -
         name: Validate Terragrunt files
         working-directory: ${{ inputs.WORKING_DIR }}
         run: |
-          terragrunt hcl validate --inputs --strict"
+          terragrunt hcl validate --inputs --strict
       -
         name: Format Terragrunt files
         working-directory: ${{ inputs.WORKING_DIR }}
