@@ -7,9 +7,9 @@ unit "dns_tree" {
   path   = "dns-tree"
 
   values = {
-    import_hosted_zone_id = "Z07465232HRS85ZSQYRZY"
-    domain                = local.domain
-    validate              = true
+    use_existing_zone = true
+    domain            = local.domain
+    validate          = true
 
     // delegate_subdomain = {
     //   domain = "dev.rx-refill-reminders.com"
