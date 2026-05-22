@@ -1,22 +1,32 @@
 # stacks
 
-Terragrunt stacks (`dev`, `prd`). Each stack directory contains:
+Terragrunt stacks (`dev`, `prd`). Each stack directory contains only:
 
-- `stack.yml` — AWS account, assume-role ARN, and S3 state bucket (`states-bucket`)
-- `env.hcl` — environment-specific values passed to units (e.g. domain)
-- `<unit>/terragrunt.hcl` — deployable units
+| File | Purpose |
+|------|---------|
+| `stack.yml` | AWS account, assume-role ARN, S3 state bucket |
+| `terragrunt.hcl` | Stack-level locals (e.g. domain) |
+| `terragrunt.stack.hcl` | Blueprint — generates all units on demand |
 
-Shared config lives in [`root.hcl`](root.hcl), which reads `stack.yml` for the S3 backend (`use_lockfile = true`). Requires **Terraform >= 1.10** (GitHub `TERRAFORM_VERSION` variable).
+Units are generated under `.terragrunt-stack/` (gitignored). Do not add per-unit folders under `prd/` or `dev/`.
 
-State keys: `<stack>/<unit>/terraform.tfstate` (relative to `root.hcl`).
+Shared backend config: [`root.hcl`](root.hcl) reads `stack.yml` (`use_lockfile = true`). Requires **Terraform >= 1.10**.
 
-### Units
-
-| Stack | Unit | Config |
-|-------|------|--------|
-| `prd` | `dns-tree` | [`prd/dns-tree/terragrunt.hcl`](prd/dns-tree/terragrunt.hcl) + [`prd/env.hcl`](prd/env.hcl) |
+## Commands
 
 ```bash
-cd infra/stacks/prd/dns-tree
-terragrunt plan
+cd infra/stacks/prd
+terragrunt stack run plan    # generate + plan
+terragrunt stack run apply
 ```
+
+State keys: `prd/.terragrunt-stack/dns-tree/terraform.tfstate` (relative to `root.hcl`).
+
+## Adding a unit
+
+1. Add a template under [`../units/<name>/terragrunt.hcl`](../units/).
+2. Add a `unit` block to each env’s `terragrunt.stack.hcl`.
+
+Unit templates: [`../units/dns-tree/terragrunt.hcl`](../units/dns-tree/terragrunt.hcl).
+
+Stack domains: [`prd/terragrunt.hcl`](prd/terragrunt.hcl), [`dev/terragrunt.hcl`](dev/terragrunt.hcl).

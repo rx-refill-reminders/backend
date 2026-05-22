@@ -63,4 +63,4 @@ jobs:
         id: plan
         working-directory: ${{ inputs.STACKS_DIR }}/${{ matrix.STACK }}
         run: |
-          terragrunt run --all plan --non-interactive
+          terragrunt stack run plan --non-interactive
