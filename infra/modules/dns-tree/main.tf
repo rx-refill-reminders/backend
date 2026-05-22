@@ -21,7 +21,7 @@ data "aws_route53_zone" "existing_zone" {
 locals {
   root_zone_id          = var.use_existing_zone ? data.aws_route53_zone.existing_zone[0].zone_id : aws_route53_zone.zone[0].zone_id
   root_zone_name        = var.use_existing_zone ? data.aws_route53_zone.existing_zone[0].name : aws_route53_zone.zone[0].name
-  root_zone_nameservers = var.use_existing_zone ? data.aws_route53_zone.existing_zone[0].name_servers : aws_route53_zone.zone[0].zone_name_serversid
+  root_zone_nameservers = var.use_existing_zone ? data.aws_route53_zone.existing_zone[0].name_servers : aws_route53_zone.zone[0].name_servers
 }
 
 module "root_cert" {
