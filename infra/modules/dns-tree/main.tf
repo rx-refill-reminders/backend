@@ -48,8 +48,8 @@ module "auth_cert" {
 resource "aws_route53_record" "delegated" {
   count = var.delegate_subdomain == null ? 0 : 1
 
-  zone_id = aws_route53_zone.zone.zone_id
-  name    = try(var.delegate_subdomain["root"].domain, "")
+  zone_id = aws_route53_zone.zone["root"].zone_id
+  name    = try(var.delegate_subdomain.domain, "")
   type    = "NS"
   ttl     = 300
   records = try(var.delegate_subdomain.nameservers, [])
