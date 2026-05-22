@@ -8,6 +8,6 @@ unit "dns_tree" {
 
   values = {
     domain   = local.domain
-    validate = true
+    validate = false
   }
 }

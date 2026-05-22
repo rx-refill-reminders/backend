@@ -6,9 +6,9 @@ on:
       - 'infra/**'
 
 permissions:
-  contents: read
+  contents: write
   id-token: write
-  pull-requests: read
+  pull-requests: write
 
 defaults:
   run:
