@@ -96,7 +96,7 @@ runs:
           echo "stacks-changed=$ALL_STACKS" | tee -a "$GITHUB_OUTPUT"
         else
           echo "modules-changed=false" | tee -a "$GITHUB_OUTPUT"
-          else "stacks-changed=$STACK_CHANGES" | tee -a "$GITHUB_OUTPUT"
+          echo "stacks-changed=$STACK_CHANGES" | tee -a "$GITHUB_OUTPUT"
         fi
 
         echo "::endgroup::"
