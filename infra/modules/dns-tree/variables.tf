@@ -10,7 +10,7 @@ variable "domain" {
 variable "delegate_subdomain" {
   description = "Delegate a subdomain to another hosted zone, if need be"
   type = object({
-    domain = string
+    domain      = string
     nameservers = list(string)
   })
   default = null
