@@ -8,7 +8,7 @@ unit "dns_tree" {
 
   values = {
     domain   = local.domain
-    validate = false
+    validate = true
 
     delegate_subdomain = {
       domain = "dev.rx-refill-reminders.com"
