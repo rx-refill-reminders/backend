@@ -8,6 +8,8 @@ if [[ -z "$STACKS_DIR" ]]; then
     exit 1
 fi
 
+>&2 man find
+
 STACK_PATHS=$(find "$STACKS_DIR" -type d -depth 1)
 while IFS='' read -r STACK_DIR && [[ -n "$STACK_DIR" ]]; do
   STACK_NAME=$(basename "$STACK_DIR")
