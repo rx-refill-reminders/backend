@@ -2,9 +2,9 @@ locals {
   domain = "dev.rx-refill-reminders.com"
 }
 
-unit "dns_tree" {
-  source = "${get_repo_root()}/infra/units/dns-tree"
-  path   = "dns-tree"
+unit "dns_hosted_zone" {
+  source = "${get_repo_root()}/infra/units/dns-hosted-zone"
+  path   = "dns-hosted-zone"
 
   values = {
     domain   = local.domain
