@@ -65,6 +65,8 @@ runs:
             outcomeEmoji = '❌';
           }
 
+          const actionOutput = process.env.TG_ACTION_OUTPUT.replaceAll('%0A', '\n');
+
           const commentLines = [
             `### ${outcomeEmoji} Terragrunt execution in ${process.env.TG_DIR} ${outcome}`,
             '',
@@ -74,10 +76,10 @@ runs:
 
           if (succeeded) {
             let planOverview;
-            if (process.env.TG_ACTION_OUTPUT.includes('No changes. Your infrastructure matches the configuration.')) {
+            if (actionOutput.includes('No changes. Your infrastructure matches the configuration.')) {
               planOverview = 'No changes'
             } else {
-              const matches = process.env.TG_ACTION_OUTPUT.match(/Plan: (?<plan>.+)/);
+              const matches = actionOutput.match(/Plan: (?<plan>.+)/);
 
               if (matches) {
                 planOverview = matches.groups.plan;
@@ -96,7 +98,7 @@ runs:
 
           commentLines.push(
             '```terraform',
-            process.env.TG_ACTION_OUTPUT,
+            actionOutput,
             '```',
           )
 
