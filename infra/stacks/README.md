@@ -20,13 +20,13 @@ terragrunt stack run plan    # generate + plan
 terragrunt stack run apply
 ```
 
-State keys: `prd/.terragrunt-stack/dns-tree/terraform.tfstate` (relative to `root.hcl`).
+State keys: `prd/.terragrunt-stack/dns-hosted-zone/terraform.tfstate` (relative to `root.hcl`).
 
 ## Adding a unit
 
 1. Add a template under [`../units/<name>/terragrunt.hcl`](../units/).
 2. Add a `unit` block to each env’s `terragrunt.stack.hcl`.
 
-Unit templates: [`../units/dns-tree/terragrunt.hcl`](../units/dns-tree/terragrunt.hcl).
+Unit templates: [`../units/dns-hosted-zone/terragrunt.hcl`](../units/dns-hosted-zone/terragrunt.hcl).
 
 Stack domains: [`prd/terragrunt.hcl`](prd/terragrunt.hcl), [`dev/terragrunt.hcl`](dev/terragrunt.hcl).
