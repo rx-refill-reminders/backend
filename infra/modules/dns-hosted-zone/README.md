@@ -41,13 +41,8 @@
 
 | Name | Description |
 |------|-------------|
-| <a name="output_api_certificate_arn"></a> [api\_certificate\_arn](#output\_api\_certificate\_arn) | ACM certificate ARN for the API subdomain |
-| <a name="output_api_domain"></a> [api\_domain](#output\_api\_domain) | API subdomain name |
-| <a name="output_auth_certificate_arn"></a> [auth\_certificate\_arn](#output\_auth\_certificate\_arn) | ACM certificate ARN for the auth subdomain |
-| <a name="output_auth_domain"></a> [auth\_domain](#output\_auth\_domain) | Auth subdomain name |
+| <a name="output_certificate_arn"></a> [certificate\_arn](#output\_certificate\_arn) | ACM certificate ARN for the root domain |
 | <a name="output_name_servers"></a> [name\_servers](#output\_name\_servers) | Route53 name servers for the hosted zone |
-| <a name="output_root_certificate_arn"></a> [root\_certificate\_arn](#output\_root\_certificate\_arn) | ACM certificate ARN for the root domain |
-| <a name="output_root_domain"></a> [root\_domain](#output\_root\_domain) | Web domain name (root or dev subdomain) |
 | <a name="output_zone_id"></a> [zone\_id](#output\_zone\_id) | The hosted zone ID |
 | <a name="output_zone_name"></a> [zone\_name](#output\_zone\_name) | The hosted zone name |
 <!-- END_TF_DOCS -->
