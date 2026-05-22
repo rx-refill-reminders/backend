@@ -41,20 +41,6 @@ module "acm_cert" {
   }
 }
 
-removed {
-  from = module.api_cert
-  lifecycle {
-    destroy = false
-  }
-}
-
-removed {
-  from = module.auth_cert
-  lifecycle {
-    destroy = false
-  }
-}
-
 resource "aws_route53_record" "delegated" {
   count = var.delegate_subdomain == null ? 0 : 1
 
