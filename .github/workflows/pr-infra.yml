@@ -59,6 +59,7 @@ jobs:
       STACKS: ${{ needs.detect-changes.outputs.stacks-changed }}
 
   pr-ready:
+    if: ${{ always() }}
     needs: 
       - detect-changes
       - check-modules
