@@ -1,9 +1,7 @@
-name: infra-pr
+name: check-infra
 
 on:
-  pull_request:
-    paths:
-      - 'infra/**'
+  workflow_call:
 
 permissions:
   contents: write
@@ -13,10 +11,6 @@ permissions:
 defaults:
   run:
     shell: bash
-
-concurrency:
-  group: ${{ github.ref }}-${{ github.workflow }}
-  cancel-in-progress: true
 
 jobs:
 
@@ -70,19 +64,3 @@ jobs:
       TERRAFORM_VERSION: ${{ vars.TERRAFORM_VERSION }}
       STACKS_DIR: infra/stacks
       STACKS: ${{ needs.detect-changes.outputs.stacks-changed }}
-
-  pr-ready:
-    if: ${{ always() }}
-    needs: 
-      - detect-changes
-      - lint
-      - plan
-    runs-on: ubuntu-latest
-    steps:
-      -
-        uses: actions/checkout@v6
-      -
-        name: Emit PR ready check
-        uses: ./.github/actions/pr-ready
-        with:
-          needs: ${{ toJSON(needs) }}
