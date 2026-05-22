@@ -16,7 +16,27 @@ defaults:
 
 jobs:
 
-  lint:
+  detect-changes:
+    runs-on: ubuntu-latest
+    outputs:
+      modules-changed: ${{ steps.build-matrix.outputs.modules-changed }}
+      stacks-changed: ${{ steps.build-matrix.outputs.stacks-changed }}
+    steps:
+      -
+        uses: actions/checkout@v6
+      -
+        name: Detect changes
+        uses: ./.github/actions/tg-matrix
+        id: build-matrix
+        with:
+          modules-dirs: |
+            - infra/modules
+            - infra/modules-hcls
+          stacks-dir: infra/stacks
+
+  check-modules:
+    needs: detect-changes
+    if: ${{ needs.detect-changes.outputs.modules-changed == 'true' }}
     uses: ./.github/workflows/check-tf-modules.yml
     with:
       TERRAGRUNT_VERSION: ${{ vars.TERRAGRUNT_VERSION }}
@@ -29,7 +49,8 @@ jobs:
 
   pr-ready:
     needs: 
-      - lint
+      - detect-changes
+      - check-modules
     runs-on: ubuntu-latest
     steps:
       -
