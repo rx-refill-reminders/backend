@@ -3,7 +3,7 @@ include "root" {
 }
 
 terraform {
-  source = "${get_repo_root()}//infra/modules/dns-tree"
+  source = "${get_repo_root()}//infra/modules/dns-hosted-zone"
 }
 
 inputs = values
