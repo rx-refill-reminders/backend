@@ -15,7 +15,7 @@ unit "dns_hosted_zone" {
 
   values = {
     domain   = local.domain
-    validate = false
+    validate = true
   }
 }
 
