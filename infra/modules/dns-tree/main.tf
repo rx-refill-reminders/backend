@@ -3,20 +3,32 @@ locals {
   auth_subdomain = "auth.${var.domain}"
 }
 
-import {
-  id = var.import_hosted_zone_id
-  to = aws_route53_zone.zone
+moved {
+  from = aws_route53_zone.zone
+  to   = aws_route53_zone.zone[0]
 }
 
 resource "aws_route53_zone" "zone" {
-  name = var.domain
+  count = var.use_existing_zone ? 0 : 1
+  name  = var.domain
+}
+
+data "aws_route53_zone" "existing_zone" {
+  count = var.use_existing_zone ? 1 : 0
+  name  = var.domain
+}
+
+locals {
+  root_zone_id          = var.use_existing_zone ? data.aws_route53_zone.existing_zone[0].zone_id : aws_route53_zone.zone[0].zone_id
+  root_zone_name        = var.use_existing_zone ? data.aws_route53_zone.existing_zone[0].name : aws_route53_zone.zone[0].name
+  root_zone_nameservers = var.use_existing_zone ? data.aws_route53_zone.existing_zone[0].name_servers : aws_route53_zone.zone[0].zone_name_serversid
 }
 
 module "root_cert" {
   source = "../acm-dns-certificate"
 
   domain_name = var.domain
-  zone_id     = aws_route53_zone.zone.zone_id
+  zone_id     = local.root_zone_id
   validate    = var.validate
 }
 
@@ -24,7 +36,7 @@ module "api_cert" {
   source = "../acm-dns-certificate"
 
   domain_name = local.api_subdomain
-  zone_id     = aws_route53_zone.zone.zone_id
+  zone_id     = local.root_zone_id
   validate    = var.validate
 }
 
@@ -32,14 +44,14 @@ module "auth_cert" {
   source = "../acm-dns-certificate"
 
   domain_name = local.auth_subdomain
-  zone_id     = aws_route53_zone.zone.zone_id
+  zone_id     = local.root_zone_id
   validate    = var.validate
 }
 
 resource "aws_route53_record" "delegated" {
   count = var.delegate_subdomain == null ? 0 : 1
 
-  zone_id = aws_route53_zone.zone.zone_id
+  zone_id = local.root_zone_id
   name    = try(var.delegate_subdomain.domain, "")
   type    = "NS"
   ttl     = 300

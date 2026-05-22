@@ -1,7 +1,7 @@
-variable "import_hosted_zone_id" {
-  type        = string
-  default     = null
-  description = "Hosted zone ID to import as the root zone"
+variable "use_existing_zone" {
+  type        = bool
+  default     = false
+  description = "If true, searches for an existing hosted zone rather than creating a new one"
 }
 
 variable "validate" {
