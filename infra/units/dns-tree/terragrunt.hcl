@@ -6,7 +6,4 @@ terraform {
   source = "${get_repo_root()}//infra/modules/dns-tree"
 }
 
-inputs = {
-  domain   = values.domain
-  validate = values.validate
-}
+inputs = values
