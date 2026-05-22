@@ -21,7 +21,7 @@ jobs:
   detect-changes:
     runs-on: ubuntu-latest
     outputs:
-      infra-changed: ${{ steps.paths-filter.outputs.infra-changed }}
+      infra-changed: ${{ steps.paths-filter.outputs.infra == 'true' }}
     steps:
       -
         uses: actions/checkout@v6
