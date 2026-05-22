@@ -8,7 +8,7 @@ include "env" {
 }
 
 terraform {
-  source = "${get_repo_root()}/infra/modules/dns-tree"
+  source = "${get_repo_root()}//infra/modules/dns-tree"
 }
 
 inputs = {
