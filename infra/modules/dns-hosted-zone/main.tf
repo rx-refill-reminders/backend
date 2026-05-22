@@ -24,8 +24,17 @@ locals {
   root_zone_nameservers = var.use_existing_zone ? data.aws_route53_zone.existing_zone[0].name_servers : aws_route53_zone.zone[0].name_servers
 }
 
-module "root_cert" {
-  source = "../acm-dns-certificate"
+moved {
+  from = module.root_cert
+  to   = module.acm_cert
+}
+
+module "acm_cert" {
+  source = "../dns-acm-certificate"
+
+  providers = {
+    aws.us_east_1 = aws.us_east_1
+  }
 
   domain_name = var.domain
   zone_id     = local.root_zone_id
@@ -33,19 +42,27 @@ module "root_cert" {
 }
 
 module "api_cert" {
-  source = "../acm-dns-certificate"
+  source = "../dns-acm-certificate"
+
+  providers = {
+    aws.us_east_1 = aws.us_east_1
+  }
 
   domain_name = local.api_subdomain
   zone_id     = local.root_zone_id
-  validate    = var.validate
+  validate    = false
 }
 
 module "auth_cert" {
-  source = "../acm-dns-certificate"
+  source = "../dns-acm-certificate"
+
+  providers = {
+    aws.us_east_1 = aws.us_east_1
+  }
 
   domain_name = local.auth_subdomain
   zone_id     = local.root_zone_id
-  validate    = var.validate
+  validate    = false
 }
 
 resource "aws_route53_record" "delegated" {
