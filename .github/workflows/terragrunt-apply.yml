@@ -42,6 +42,7 @@ jobs:
         uses: actions/checkout@v6
       -
         name: Install Terraform & Terragrunt
+        id: tg-install
         uses: ./.github/actions/tg-install
         with:
           terraform-version: ${{ inputs.TERRAFORM_VERSION }}
@@ -60,9 +61,7 @@ jobs:
           aws-region: us-east-1
       -
         name: terragrunt apply
-        id: apply
-        working-directory: ${{ inputs.STACKS_DIR }}/${{ matrix.STACK }}
-        run: |
-          terragrunt stack run apply \
-            --non-interactive \
-            --log-format bare
+        uses: ./.github/actions/tg-command
+        with:
+          working-directory: ${{ inputs.STACKS_DIR }}/${{ matrix.STACK }}
+          command: stack run apply --log-format bare

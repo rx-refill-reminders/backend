@@ -1,16 +1,16 @@
 output "zone_id" {
   description = "The hosted zone ID"
-  value       = aws_route53_zone.zone.zone_id
+  value       = local.root_zone_id
 }
 
 output "zone_name" {
   description = "The hosted zone name"
-  value       = aws_route53_zone.zone.name
+  value       = local.root_zone_name
 }
 
 output "name_servers" {
   description = "Route53 name servers for the hosted zone"
-  value       = aws_route53_zone.zone.name_servers
+  value       = local.root_zone_nameservers
 }
 
 output "root_certificate_arn" {

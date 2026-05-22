@@ -14,6 +14,10 @@ defaults:
   run:
     shell: bash
 
+concurrency:
+  group: ${{ github.ref }}-${{ github.workflow }}
+  cancel-in-progress: true
+
 jobs:
 
   detect-changes:
@@ -34,19 +38,28 @@ jobs:
             - infra/units
           stacks-dir: infra/stacks
 
-  check-modules:
+  lint:
     needs: detect-changes
     if: ${{ needs.detect-changes.outputs.modules-changed == 'true' }}
-    uses: ./.github/workflows/check-tf-modules.yml
-    with:
-      TERRAGRUNT_VERSION: ${{ vars.TERRAGRUNT_VERSION }}
-      TERRAFORM_VERSION: ${{ vars.TERRAFORM_VERSION }}
-      MODULES_DIR: infra/modules
-      UNITS_DIR: infra/units
-      STACKS_DIR: infra/stacks
-    secrets:
-      GH_APP_CLIENT_ID: ${{ secrets.WRITER_APP_CLIENT_ID }}
-      GH_APP_PRIVATE_KEY: ${{ secrets.WRITER_APP_PRIVATE_KEY }}
+    runs-on: ubuntu-latest
+    steps:
+      -
+        uses: actions/checkout@v6
+      -
+        name: Install Terraform/Terragrunt
+        uses: ./.github/actions/tg-install
+        with:
+          terragrunt-version: ${{ vars.TERRAGRUNT_VERSION }}
+          terraform-version: ${{ vars.TERRAFORM_VERSION }}
+      -
+        name: Lint Terraform & Terragrunt code
+        uses: ./.github/actions/tg-lint
+        with:
+          gh-app-client-id: ${{ secrets.WRITER_APP_CLIENT_ID }}
+          gh-app-private-key: ${{ secrets.WRITER_APP_PRIVATE_KEY }}
+          tf-modules-dir: infra/modules
+          tg-units-dir: infra/units
+          tg-stacks-dir: infra/stacks
 
   plan:
     needs: detect-changes
@@ -62,7 +75,7 @@ jobs:
     if: ${{ always() }}
     needs: 
       - detect-changes
-      - check-modules
+      - lint
       - plan
     runs-on: ubuntu-latest
     steps:

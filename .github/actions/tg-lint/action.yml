@@ -1,0 +1,152 @@
+name: Lint Terraform modules & Terragrunt stacks
+description: ""
+
+inputs:
+  gh-app-client-id:
+    description: If specified, git commands will be performed by this app, instead of the caller
+    required: false
+  gh-app-private-key:
+    description: If specified, git commands will be performed by this app, instead of the caller
+    required: false
+  tf-modules-dir:
+    required: true
+    description: The directory to search within for Terraform modules
+  tg-units-dir:
+    required: true
+    description: The directory to search within for Terragrunt units
+  tg-stacks-dir:
+    required: true
+    description: The directory to search within for Terragrunt stacks
+
+runs:
+  using: composite
+  steps:
+    -
+      name: Check if app credentials set
+      id: check-app-secrets
+      shell: bash
+      env:
+        GH_APP_CLIENT_ID: ${{ inputs.gh-app-client-id }}
+        GH_APP_PRIVATE_KEY: ${{ inputs.gh-app-private-key }}
+      run: |
+        if [[ -z "$GH_APP_CLIENT_ID" ]]; then
+          echo "No gh-app-client-id provided"
+          echo "set=false" | tee -a "$GITHUB_OUTPUT"
+          exit 0
+        fi
+
+        if [[ -z "$GH_APP_PRIVATE_KEY" ]]; then
+          echo "No gh-app-private-key provided"
+          echo "set=false" | tee -a "$GITHUB_OUTPUT"
+          exit 0
+        fi
+
+        echo "set=true" | tee -a "$GITHUB_OUTPUT"
+    -
+      name: Fetch app token
+      id: fetch-app-token
+      if: steps.check-app-secrets.outputs.set == 'true'
+      uses: actions/create-github-app-token@v3
+      with:
+        client-id: ${{ inputs.gh-app-client-id }}
+        private-key: ${{ inputs.gh-app-private-key }}
+    -
+      name: Format Terraform files
+      shell: bash
+      working-directory: ${{ inputs.tf-modules-dir }}
+      run: |
+        # Format Terraform files
+        terraform fmt -recursive
+    -
+      name: Format Terragrunt unit files
+      shell: bash
+      working-directory: ${{ inputs.UNITS_DIR }}
+      run: |
+        # Format Terragrunt unit files
+        terragrunt hcl fmt
+    -
+      name: Format Terragrunt stack files
+      shell: bash
+      working-directory: ${{ inputs.tg-stacks-dir }}
+      run: |
+        # Format Terragrunt stack files
+        terragrunt hcl fmt
+    -
+      name: Validate Terragrunt stacks
+      shell: bash
+      working-directory: ${{ inputs.tg-stacks-dir }}
+      run: |
+        # Validate Terragrunt stacks
+        terragrunt hcl validate --inputs --strict
+    -
+      name: List all module directories
+      id: module-paths
+      shell: bash
+      env:
+        MODULES_DIR: ${{ inputs.tf-modules-dir }}
+      run: |
+        # List all Terraform modules
+
+        MODULE_DIRS_JSON=$(find "$MODULES_DIR" -type f -name '*.tf' \
+          | xargs -n1 dirname \
+          | sort -u \
+          | jq -Rsrc 'split("\n") | map(select(. != ""))')
+
+        echo "paths-json=$MODULE_DIRS_JSON" | tee -a "$GITHUB_OUTPUT"
+    -
+      name: Ensure all modules have README.md files
+      uses: actions/github-script@v7
+      env:
+        MODULE_PATHS_JSON: ${{ steps.module-paths.outputs.paths-json }}
+      with:
+        script: |
+          const fs = require('fs');
+          const path = require('path');
+
+          const modulePaths = JSON.parse(process.env.MODULE_PATHS_JSON);
+          const tfdocsMarker = '<!-- BEGIN_TF_DOCS -->\n<!-- END_TF_DOCS -->';
+
+          for (const modulePath of modulePaths) {
+            const readmePath = path.join(modulePath, 'README.md');
+
+            if (!fs.existsSync(readmePath)) {
+              const basename = path.basename(modulePath);
+              const content = `# ${basename}\n\n${tfdocsMarker}\n`;
+
+              fs.writeFileSync(readmePath, content, 'utf8');
+              console.log(`Created ${readmePath}`);
+            }
+          }
+
+    -
+      name: Detect changes
+      id: detect-changes
+      shell: bash
+      run: |
+        # Check for generated changes
+
+        git status -s
+
+        if [ -n "$(git status -s)" ]; then
+          echo "detected=true" | tee -a "$GITHUB_OUTPUT"
+        else
+          echo "detected=false" | tee -a "$GITHUB_OUTPUT"
+        fi
+    -
+      name: Commit changes if detected
+      if: ${{ steps.detect-changes.outputs.detected == 'true' }}
+      uses: planetscale/ghcommit-action@v0.2.20
+      env:
+        GITHUB_TOKEN: ${{ steps.fetch-app-token.outputs.token || github.token }}
+      with:
+        commit_message: "Terraform/Terragrunt auto-generate"
+        repo: ${{ github.repository }}
+        branch: ${{ github.head_ref || github.ref_name }}
+    -
+      name: Fail if changes
+      shell: bash
+      if: ${{ steps.detect-changes.outputs.detected == 'true' }}
+      run: |
+        # Fail if changes detected
+        
+        exit 1

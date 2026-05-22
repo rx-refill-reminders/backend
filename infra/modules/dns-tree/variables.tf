@@ -1,3 +1,9 @@
+variable "use_existing_zone" {
+  type        = bool
+  default     = false
+  description = "If true, searches for an existing hosted zone rather than creating a new one"
+}
+
 variable "validate" {
   type    = bool
   default = false
