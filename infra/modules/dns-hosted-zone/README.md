@@ -19,6 +19,8 @@
 | Name | Source | Version |
 |------|--------|---------|
 | <a name="module_acm_cert"></a> [acm\_cert](#module\_acm\_cert) | ../dns-acm-certificate | n/a |
+| <a name="module_api_cert"></a> [api\_cert](#module\_api\_cert) | ../dns-acm-certificate | n/a |
+| <a name="module_auth_cert"></a> [auth\_cert](#module\_auth\_cert) | ../dns-acm-certificate | n/a |
 
 ## Resources
 
