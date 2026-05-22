@@ -98,9 +98,9 @@ runs:
 
           commentLines.push(
             '<detail>',
-            ''
+            '',
             '<summary>Full logs</summary>',
-            ''
+            '',
             '```terraform',
             actionOutput,
             '```',
