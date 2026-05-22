@@ -1,4 +1,4 @@
-name: terragrunt-plan
+name: terragrunt-apply
 
 on:
 
@@ -30,7 +30,7 @@ defaults:
 
 jobs:
 
-  plan:
+  apply:
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -59,8 +59,8 @@ jobs:
           role-to-assume: ${{ steps.stack-info.outputs.assume-role-arn }}
           aws-region: us-east-1
       -
-        name: terragrunt plan
-        id: plan
+        name: terragrunt apply
+        id: apply
         working-directory: ${{ inputs.STACKS_DIR }}/${{ matrix.STACK }}
         run: |
-          terragrunt run --all plan --non-interactive
+          terragrunt run --all apply --non-interactive
