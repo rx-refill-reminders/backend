@@ -3,6 +3,14 @@ locals {
   auth_subdomain = "auth.${var.domain}"
 }
 
+import {
+  for_each = var.import_hosted_zone_id == null ? tomap({}) : tomap({ root : var.import_hosted_zone_id })
+  to       = aws_route53_zone.zone
+  identity = {
+    zone_id = each.value
+  }
+}
+
 resource "aws_route53_zone" "zone" {
   name = var.domain
 }
