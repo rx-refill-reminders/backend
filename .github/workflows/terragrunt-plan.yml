@@ -36,7 +36,6 @@ jobs:
       fail-fast: false
       matrix:
         STACK: ${{ fromJSON(inputs.STACKS) }}
-    name: ${{ matrix.STACK }}
     steps:
       -
         uses: actions/checkout@v6
@@ -64,5 +63,5 @@ jobs:
         uses: ./.github/actions/tg-command
         with:
           working-directory: ${{ inputs.STACKS_DIR }}/${{ matrix.STACK }}
-          command: stack run plan --log-format bare
+          command: stack run plan
           pr-comment: true

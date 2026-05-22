@@ -55,3 +55,12 @@ unit "cognito_user_pool" {
     enable_google_signin  = false
   }
 }
+
+unit "api_gateway" {
+  source = "${get_repo_root()}/infra/units/api-gateway"
+  path   = "api-gateway"
+
+  values = {
+    name = "api"
+  }
+}
