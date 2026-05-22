@@ -21,14 +21,12 @@ runs:
       shell: bash
       id: parse-stack-yml
       env:
-        MODULES_DIRS: ${{ inputs.modules-dirs }}
+        INFO_FILE: ${{ inputs.INFO_FILE }}
       run: |
-        echo "::group::Parse $INFO_FILE"
+        # Parse info file
 
         AWS_ACCOUNT_ID=$(cat "$INFO_FILE" | yq '.["aws-account-id"]')
         echo "aws-account-id=$AWS_ACCOUNT_ID" | tee -a "$GITHUB_OUTPUT"
         
         ASSUME_ROLE_ARN=$(cat "$INFO_FILE" | yq '.["assume-role-arn"]')
         echo "assume-role-arn=$ASSUME_ROLE_ARN" | tee -a "$GITHUB_OUTPUT"
-
-        echo "::endgroup::"
