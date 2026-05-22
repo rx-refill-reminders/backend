@@ -72,23 +72,11 @@ jobs:
         with:
           token: ${{ steps.fetch-app-token.outputs.token || github.token }}
       -
-        name: Install Terraform
-        uses: hashicorp/setup-terraform@v4
+        name: Install Terraform & Terragrunt
+        uses: ./.github/actions/tg-install
         with:
-          terraform_version: ${{ inputs.TERRAFORM_VERSION }}
-          terraform_wrapper: false
-      -
-        name: Identify Terraform path
-        id: tf-path
-        run: |
-          TERRAFORM_BINARY=$(command -v terraform)
-          echo "path=$TERRAFORM_BINARY" | tee -a "$GITHUB_OUTPUT"
-      -
-        name: Install Terragrunt
-        uses: gruntwork-io/terragrunt-action@v3
-        with:
-          tg_version: ${{ inputs.TERRAGRUNT_VERSION }}
-          tf_path: ${{ steps.tf-path.outputs.path }}
+          TERRAFORM_VERSION: ${{ inputs.TERRAFORM_VERSION }}
+          TERRAGRUNT_VERSION: ${{ inputs.TERRAGRUNT_VERSION }}
       -
         name: Format Terraform files
         working-directory: ${{ inputs.WORKING_DIR }}

@@ -1,0 +1,2 @@
+aws-account-id: 104875668206
+assume-role-arn: arn:aws:iam::104875668206:role/terraform

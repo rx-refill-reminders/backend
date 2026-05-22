@@ -1,0 +1,37 @@
+name: Install Terraform & Terragrunt
+description: ""
+
+inputs:
+  TERRAGRUNT_VERSION:
+    description: Terragrunt version
+    required: true
+  TERRAFORM_VERSION:
+    description: Terraform version
+    required: true
+
+runs:
+  using: composite
+  steps:
+    -
+      name: Install Terraform
+      uses: hashicorp/setup-terraform@v4
+      with:
+        terraform_version: ${{ inputs.TERRAFORM_VERSION }}
+        terraform_wrapper: false
+    -
+      name: Identify Terraform path
+      shell: bash
+      id: tf-path
+      run: |
+        echo "::group::Identify Terraform path"
+
+        TERRAFORM_BINARY=$(command -v terraform)
+        echo "path=$TERRAFORM_BINARY" | tee -a "$GITHUB_OUTPUT"
+
+        echo "::endgroup:;"
+    -
+      name: Install Terragrunt
+      uses: gruntwork-io/terragrunt-action@v3
+      with:
+        tg_version: ${{ inputs.TERRAGRUNT_VERSION }}
+        tf_path: ${{ steps.tf-path.outputs.path }}
