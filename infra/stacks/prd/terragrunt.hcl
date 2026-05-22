@@ -1,3 +1,7 @@
+include "root" {
+  path = find_in_parent_folders("root.hcl")
+}
+
 locals {
-  domain = "rx-refill-reminders.com" # apex hosted zone for production
+  domain = "rx-refill-reminders.com"
 }
