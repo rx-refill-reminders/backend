@@ -2,12 +2,19 @@ name: Install Terraform & Terragrunt
 description: ""
 
 inputs:
-  TERRAGRUNT_VERSION:
+  terragrunt-version:
     description: Terragrunt version
     required: true
-  TERRAFORM_VERSION:
+  terraform-version:
     description: Terraform version
     required: true
+outputs:
+  terragrunt-version:
+    description: The installed Terragrunt version
+    value: ${{ inputs.terragrunt-version }}
+  terraform-path:
+    description: The path to the Terraform executable
+    value: ${{ steps.tf-path.outputs.path }}
 
 runs:
   using: composite
@@ -16,7 +23,7 @@ runs:
       name: Install Terraform
       uses: hashicorp/setup-terraform@v4
       with:
-        terraform_version: ${{ inputs.TERRAFORM_VERSION }}
+        terraform_version: ${{ inputs.terraform-version }}
         terraform_wrapper: false
     -
       name: Identify Terraform path
@@ -33,5 +40,5 @@ runs:
       name: Install Terragrunt
       uses: gruntwork-io/terragrunt-action@v3
       with:
-        tg_version: ${{ inputs.TERRAGRUNT_VERSION }}
+        tg_version: ${{ inputs.terragrunt-version }}
         tf_path: ${{ steps.tf-path.outputs.path }}
