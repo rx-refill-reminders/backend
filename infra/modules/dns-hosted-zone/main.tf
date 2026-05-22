@@ -41,30 +41,6 @@ module "acm_cert" {
   }
 }
 
-module "api_cert" {
-  source = "../dns-acm-certificate"
-
-  domain_name = local.api_subdomain
-  zone_id     = local.root_zone_id
-  validate    = false
-
-  providers = {
-    aws = aws.us_east_1
-  }
-}
-
-module "auth_cert" {
-  source = "../dns-acm-certificate"
-
-  domain_name = local.auth_subdomain
-  zone_id     = local.root_zone_id
-  validate    = false
-
-  providers = {
-    aws = aws.us_east_1
-  }
-}
-
 resource "aws_route53_record" "delegated" {
   count = var.delegate_subdomain == null ? 0 : 1
 
