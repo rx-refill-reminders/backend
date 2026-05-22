@@ -29,8 +29,7 @@ No modules.
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| <a name="input_env"></a> [env](#input\_env) | Environment suffix (dev or prd) | `string` | n/a | yes |
-| <a name="input_name"></a> [name](#input\_name) | Gateway name prefix (suffixed with env) | `string` | n/a | yes |
+| <a name="input_name"></a> [name](#input\_name) | API Gateway name (also used for the stage and CloudWatch log group path) | `string` | n/a | yes |
 
 ## Outputs
 
