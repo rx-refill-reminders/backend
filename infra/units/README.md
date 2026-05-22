@@ -4,4 +4,5 @@ Terragrunt unit templates — referenced by `source` in each stack’s `terragru
 
 | Unit | Module |
 |------|--------|
-| `dns-tree` | [`modules/dns-tree`](../modules/dns-tree) |
+| `dns-hosted-zone` | [`modules/dns-hosted-zone`](../modules/dns-hosted-zone) |
+| `cognito-user-pool` | [`modules/cognito-user-pool`](../modules/cognito-user-pool) |
