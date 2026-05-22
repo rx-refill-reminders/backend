@@ -91,16 +91,14 @@ jobs:
           tf_path: ${{ steps.tf-path.outputs.path }}
       -
         name: Validate Terragrunt files
-        uses: gruntwork-io/terragrunt-action@v3
-        with:
-          tg_dir: ${{ inputs.WORKING_DIR }}
-          tg_command: "hcl validate --inputs --strict"
+        working-directory: ${{ inputs.WORKING_DIR }}
+        run: |
+          terragrunt hcl validate --inputs --strict"
       -
         name: Format Terragrunt files
-        uses: gruntwork-io/terragrunt-action@v3
-        with:
-          tg_dir: ${{ inputs.WORKING_DIR }}
-          tg_command: "hcl fmt"
+        working-directory: ${{ inputs.WORKING_DIR }}
+        run: |
+          terragrunt hcl fmt
       -
         name: List all directories with *.tf files
         id: module-paths
