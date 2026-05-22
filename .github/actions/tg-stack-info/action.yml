@@ -1,0 +1,32 @@
+name: Parse stack info
+description: ""
+
+inputs:
+  INFO_FILE:
+    description: Directory to parse
+    required: true
+
+outputs:
+  aws-account-id:
+    description: AWS account ID
+    value: ${{ steps.parse-stack-yml.outputs.aws-account-id }}
+  assume-role-arn:
+    description: Worker role to assume
+    value: ${{ steps.parse-stack-yml.outputs.assume-role-arn }}
+
+runs:
+  using: composite
+  steps:
+    -
+      shell: bash
+      id: parse-stack-yml
+      env:
+        INFO_FILE: ${{ inputs.INFO_FILE }}
+      run: |
+        # Parse info file
+
+        AWS_ACCOUNT_ID=$(cat "$INFO_FILE" | yq '.["aws-account-id"]')
+        echo "aws-account-id=$AWS_ACCOUNT_ID" | tee -a "$GITHUB_OUTPUT"
+        
+        ASSUME_ROLE_ARN=$(cat "$INFO_FILE" | yq '.["assume-role-arn"]')
+        echo "assume-role-arn=$ASSUME_ROLE_ARN" | tee -a "$GITHUB_OUTPUT"
