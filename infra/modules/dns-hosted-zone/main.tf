@@ -37,7 +37,7 @@ module "acm_cert" {
   validate    = var.validate
 
   providers = {
-    aws.us_east_1 = aws.us_east_1
+    aws = aws.us_east_1
   }
 }
 
@@ -49,7 +49,7 @@ module "api_cert" {
   validate    = false
 
   providers = {
-    aws.us_east_1 = aws.us_east_1
+    aws = aws.us_east_1
   }
 }
 
@@ -61,7 +61,7 @@ module "auth_cert" {
   validate    = false
 
   providers = {
-    aws.us_east_1 = aws.us_east_1
+    aws = aws.us_east_1
   }
 }
 
