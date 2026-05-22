@@ -72,4 +72,4 @@ jobs:
         name: Emit PR ready check
         uses: ./.github/actions/pr-ready
         with:
-          needs: ${{ fromJSON(needs) }}
+          needs: ${{ toJSON(needs) }}
