@@ -90,7 +90,7 @@ runs:
       run: |
         echo "::group::Final outputs"
 
-        HAS_MODULE_CHANGES=$(jq -nrc --argjson changes "$MODULE_CHANGES" '$changes | empty | not')
+        HAS_MODULE_CHANGES=$(jq -nrc --argjson changes "$MODULE_CHANGES" '($changes | length) > 0')
         if [[ "$HAS_MODULE_CHANGES" == "true" ]]; then
           echo "modules-changed=true" | tee -a "$GITHUB_OUTPUT"
           echo "stacks-changed=$ALL_STACKS" | tee -a "$GITHUB_OUTPUT"
