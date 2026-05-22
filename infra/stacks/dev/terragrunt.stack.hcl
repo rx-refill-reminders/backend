@@ -51,6 +51,5 @@ unit "api_gateway" {
 
   values = {
     name = "api"
-    env  = "dev"
   }
 }

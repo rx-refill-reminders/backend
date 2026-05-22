@@ -1,9 +1,4 @@
 variable "name" {
-  description = "Gateway name prefix (suffixed with env)"
-  type        = string
-}
-
-variable "env" {
-  description = "Environment suffix (dev or prd)"
+  description = "API Gateway name (also used for the stage and CloudWatch log group path)"
   type        = string
 }
