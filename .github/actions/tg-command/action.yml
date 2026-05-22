@@ -97,7 +97,7 @@ runs:
           }
 
           commentLines.push(
-            '<detail>',
+            '<details>',
             '',
             '<summary>Full logs</summary>',
             '',
@@ -105,7 +105,7 @@ runs:
             actionOutput,
             '```',
             '',
-            '</detail>',
+            '</details>',
           )
 
           core.setOutput('comment-body', commentLines.join('\n'));
