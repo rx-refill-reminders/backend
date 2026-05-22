@@ -1,6 +1,4 @@
 resource "aws_acm_certificate" "certificate" {
-  provider = aws.us_east_1
-
   domain_name       = var.domain_name
   validation_method = "DNS"
 
@@ -28,8 +26,6 @@ resource "aws_route53_record" "validation_records" {
 
 resource "aws_acm_certificate_validation" "validation" {
   count = var.validate ? 1 : 0
-
-  provider = aws.us_east_1
 
   certificate_arn = aws_acm_certificate.certificate.arn
   validation_record_fqdns = [
