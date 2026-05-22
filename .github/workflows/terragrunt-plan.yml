@@ -36,6 +36,7 @@ jobs:
       fail-fast: false
       matrix:
         STACK: ${{ fromJSON(inputs.STACKS) }}
+    name: ${{ matrix.STACK }}
     steps:
       -
         uses: actions/checkout@v6
