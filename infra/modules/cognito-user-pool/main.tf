@@ -262,7 +262,7 @@ resource "aws_cognito_user_pool_client" "service" {
 resource "aws_secretsmanager_secret" "service_client_secret" {
   count = var.enable_service_client ? 1 : 0
 
-  name        = "cognito/${var.pool_name}/service-client-secret"
+  name        = "${var.pool_name}-service-client-secret"
   description = "Service client secret for ${var.pool_name}"
 }
 
@@ -274,7 +274,7 @@ resource "aws_secretsmanager_secret_version" "service_client_secret" {
     client_id      = aws_cognito_user_pool_client.service[0].id
     client_secret  = aws_cognito_user_pool_client.service[0].client_secret
     user_pool_id   = aws_cognito_user_pool.pool.id
-    cognito_domain = aws_cognito_user_pool_domain.domain.domain
+    cognito_domain = local.cognito_hostname
     token_endpoint = "${local.cognito_url}/oauth2/token"
   })
 }
