@@ -49,4 +49,6 @@ resource "aws_cognito_user_pool_domain" "custom_domain" {
   user_pool_id = aws_cognito_user_pool.pool.id
 
   certificate_arn = module.custom_domain_cert[0].certificate_arn
+
+  depends_on = [ aws_route53_record.custom_domain_alias ]
 }
