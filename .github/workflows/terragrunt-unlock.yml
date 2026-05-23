@@ -1,14 +1,27 @@
 name: terragrunt-unlock
 
+<<<<<<< HEAD
+=======
+run-name: "Unlock ${{ inputs.S3_LOCKFILE }}"
+
+>>>>>>> 5221b5a (unlock improvement)
 on:
 
   workflow_dispatch:
     inputs:
+<<<<<<< HEAD
       stack:
         description: 'stack:'
         type: string
         required: true
       s3-lockfile:
+=======
+      STACK:
+        description: 'stack:'
+        type: string
+        required: true
+      S3_LOCKFILE:
+>>>>>>> 5221b5a (unlock improvement)
         description: 's3 lockfile:'
         required: true
         type: string
@@ -25,7 +38,10 @@ jobs:
 
   unlock:
     runs-on: ubuntu-latest
+<<<<<<< HEAD
     name: ${{ inputs.stack }}
+=======
+>>>>>>> 5221b5a (unlock improvement)
     steps:
       -
         uses: actions/checkout@v6
@@ -34,7 +50,11 @@ jobs:
         id: stack-info
         uses: ./.github/actions/tg-stack-info
         with:
+<<<<<<< HEAD
           INFO_FILE: infra/stacks/${{ inputs.stack }}/stack.yml
+=======
+          INFO_FILE: infra/stacks/${{ inputs.STACK }}/stack.yml
+>>>>>>> 5221b5a (unlock improvement)
       -
         name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v6
@@ -45,10 +65,19 @@ jobs:
         name: Delete S3 lockfile
         env:
           STATES_BUCKET: ${{ steps.stack-info.outputs.states-bucket }}
+<<<<<<< HEAD
           LOCKFILE_KEY: ${{ inputs.s3-lockfile }}
+=======
+          LOCKFILE_KEY: ${{ inputs.S3_LOCKFILE }}
+>>>>>>> 5221b5a (unlock improvement)
         run: |
           LOCKFILE_KEY="${LOCKFILE_KEY#/}"
           LOCKFILE_URI="s3://${STATES_BUCKET}/${LOCKFILE_KEY}"
 
           echo "Deleting lockfile: ${LOCKFILE_URI}"
           aws s3 rm "${LOCKFILE_URI}"
+<<<<<<< HEAD
+=======
+
+          echo "::notice::Deleted ${LOCKFILE_URI}"
+>>>>>>> 5221b5a (unlock improvement)
