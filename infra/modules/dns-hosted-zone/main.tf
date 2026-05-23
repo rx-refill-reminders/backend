@@ -1,8 +1,3 @@
-locals {
-  api_subdomain  = "api.${var.domain}"
-  auth_subdomain = "auth.${var.domain}"
-}
-
 moved {
   from = aws_route53_zone.zone
   to   = aws_route53_zone.zone[0]

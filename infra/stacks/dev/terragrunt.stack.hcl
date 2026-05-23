@@ -51,5 +51,9 @@ unit "api_gateway" {
 
   values = {
     name = "api"
+
+    domain = {
+      hostname = "api.${local.domain}"
+    }
   }
 }
