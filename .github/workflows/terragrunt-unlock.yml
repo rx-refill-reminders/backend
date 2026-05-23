@@ -10,8 +10,8 @@ on:
         description: 'stack:'
         type: string
         required: true
-      S3_LOCKFILE:
-        description: 's3 lockfile:'
+      UNIT:
+        description: 'unit:'
         required: true
         type: string
 
@@ -46,7 +46,7 @@ jobs:
         name: Delete S3 lockfile
         env:
           STATES_BUCKET: ${{ steps.stack-info.outputs.states-bucket }}
-          LOCKFILE_KEY: ${{ inputs.S3_LOCKFILE }}
+          LOCKFILE_KEY: stacks/${{ inputs.STACK }}/.terragrunt-stack/${{ inputs.UNIT }}/terraform.tfstate.tflock
         run: |
           LOCKFILE_KEY="${LOCKFILE_KEY#/}"
           LOCKFILE_URI="s3://${STATES_BUCKET}/${LOCKFILE_KEY}"
@@ -54,4 +54,4 @@ jobs:
           echo "Deleting lockfile: ${LOCKFILE_URI}"
           aws s3 rm "${LOCKFILE_URI}"
 
-          echo "::notice::Deleted ${LOCKFILE_URI}"
+          echo "Deleted \`${LOCKFILE_URI}\`" >> "$GITHUB_STEP_SUMMARY"
