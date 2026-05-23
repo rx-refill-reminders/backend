@@ -56,7 +56,9 @@ jobs:
           tg-stacks-dir: infra/stacks
 
   plan:
-    needs: detect-changes
+    needs: 
+      - detect-changes
+      - lint
     if: ${{ needs.detect-changes.outputs.stacks-changed != '[]' }}
     uses: ./.github/workflows/terragrunt-plan.yml
     with:
