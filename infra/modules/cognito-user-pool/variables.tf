@@ -8,13 +8,11 @@ variable "domain_prefix" {
   type        = string
 }
 
-# Custom Domain Configuration
-variable "domain_alias" {
-  description = "Custom domain configuration for Cognito Hosted UI. If provided, uses custom domain instead of default Cognito domain."
+# Custom domain for Cognito Hosted UI (auth.<root-domain>). Omit for default Cognito domain prefix.
+variable "domain" {
   type = object({
-    domain_name     = string
-    certificate_arn = string
-    zone_id         = string
+    zone_id  = string
+    hostname = string
   })
   default = null
 }
