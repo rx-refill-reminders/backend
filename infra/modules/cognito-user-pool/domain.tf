@@ -4,28 +4,38 @@ locals {
   default_domain_prefix    = var.domain_prefix
   default_cognito_hostname = "${local.default_domain_prefix}.auth.${data.aws_region.current.region}.amazoncognito.com"
 
-  cognito_hostname = var.domain_alias == null ? local.default_cognito_hostname : var.domain_alias.domain_name
+  cognito_hostname = var.domain != null ? var.domain.hostname : local.default_cognito_hostname
   cognito_url      = "https://${local.cognito_hostname}"
 }
 
-# Cognito User Pool Domain for Hosted UI
-# Uses custom domain if provided, otherwise uses default Cognito domain
-resource "aws_cognito_user_pool_domain" "domain" {
-  domain       = var.domain_alias != null ? var.domain_alias.domain_name : local.default_domain_prefix
-  user_pool_id = aws_cognito_user_pool.pool.id
+module "auth_cert" {
+  count = var.domain != null ? 1 : 0
 
-  # If custom domain is provided, use ACM certificate
-  # Certificate MUST be in us-east-1 (CloudFront requirement)
-  certificate_arn = var.domain_alias != null ? var.domain_alias.certificate_arn : null
+  source = "../dns-acm-certificate"
+
+  domain_name = var.domain.hostname
+  zone_id     = var.domain.zone_id
+  validate    = true
+
+  providers = {
+    aws.default   = aws
+    aws.us_east_1 = aws.us_east_1
+  }
 }
 
-# Route53 ALIAS record pointing to Cognito CloudFront distribution
-# Only created when custom domain is configured
-resource "aws_route53_record" "cognito_alias" {
-  count = var.domain_alias != null ? 1 : 0
+resource "aws_cognito_user_pool_domain" "domain" {
+  domain       = var.domain != null ? var.domain.hostname : local.default_domain_prefix
+  user_pool_id = aws_cognito_user_pool.pool.id
 
-  name    = aws_cognito_user_pool_domain.domain.domain
-  zone_id = var.domain_alias.zone_id
+  # Certificate must be in us-east-1 for Cognito custom domains (CloudFront).
+  certificate_arn = var.domain != null ? module.auth_cert[0].certificate_arn : null
+}
+
+resource "aws_route53_record" "cognito_alias" {
+  count = var.domain != null ? 1 : 0
+
+  name    = var.domain.hostname
+  zone_id = var.domain.zone_id
   type    = "A"
 
   alias {

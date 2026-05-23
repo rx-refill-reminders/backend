@@ -53,6 +53,10 @@ unit "cognito_user_pool" {
     enable_service_client = true
     enable_apple_signin   = false
     enable_google_signin  = false
+
+    domain = {
+      hostname = "auth.${local.domain}"
+    }
   }
 }
 
