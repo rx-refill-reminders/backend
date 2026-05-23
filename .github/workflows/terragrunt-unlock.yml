@@ -1,0 +1,54 @@
+name: terragrunt-unlock
+
+on:
+
+  workflow_dispatch:
+    inputs:
+      stack:
+        description: 'stack:'
+        type: string
+        required: true
+      s3-lockfile:
+        description: 's3 lockfile:'
+        required: true
+        type: string
+
+permissions:
+  contents: read
+  id-token: write
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+
+  unlock:
+    runs-on: ubuntu-latest
+    name: ${{ inputs.stack }}
+    steps:
+      -
+        uses: actions/checkout@v6
+      -
+        name: Get stack info
+        id: stack-info
+        uses: ./.github/actions/tg-stack-info
+        with:
+          INFO_FILE: infra/stacks/${{ inputs.stack }}/stack.yml
+      -
+        name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v6
+        with:
+          role-to-assume: ${{ steps.stack-info.outputs.assume-role-arn }}
+          aws-region: us-east-1
+      -
+        name: Delete S3 lockfile
+        env:
+          STATES_BUCKET: ${{ steps.stack-info.outputs.states-bucket }}
+          LOCKFILE_KEY: ${{ inputs.s3-lockfile }}
+        run: |
+          LOCKFILE_KEY="${LOCKFILE_KEY#/}"
+          LOCKFILE_URI="s3://${STATES_BUCKET}/${LOCKFILE_KEY}"
+
+          echo "Deleting lockfile: ${LOCKFILE_URI}"
+          aws s3 rm "${LOCKFILE_URI}"
