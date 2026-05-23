@@ -15,7 +15,9 @@
 
 ## Modules
 
-No modules.
+| Name | Source | Version |
+|------|--------|---------|
+| <a name="module_auth_cert"></a> [auth\_cert](#module\_auth\_cert) | ../dns-acm-certificate | n/a |
 
 ## Resources
 
@@ -40,7 +42,7 @@ No modules.
 |------|-------------|------|---------|:--------:|
 | <a name="input_app_client_name"></a> [app\_client\_name](#input\_app\_client\_name) | Base name for app clients | `string` | n/a | yes |
 | <a name="input_apple_signin_config"></a> [apple\_signin\_config](#input\_apple\_signin\_config) | Configuration for Apple Sign In | <pre>object({<br/>    client_id   = string<br/>    team_id     = string<br/>    key_id      = string<br/>    private_key = string<br/>  })</pre> | `null` | no |
-| <a name="input_domain_alias"></a> [domain\_alias](#input\_domain\_alias) | Custom domain configuration for Cognito Hosted UI. If provided, uses custom domain instead of default Cognito domain. | <pre>object({<br/>    domain_name     = string<br/>    certificate_arn = string<br/>    zone_id         = string<br/>  })</pre> | `null` | no |
+| <a name="input_domain"></a> [domain](#input\_domain) | Custom domain for Cognito Hosted UI (auth.<root-domain>). Omit for default Cognito domain prefix. | <pre>object({<br/>    zone_id  = string<br/>    hostname = string<br/>  })</pre> | `null` | no |
 | <a name="input_domain_prefix"></a> [domain\_prefix](#input\_domain\_prefix) | Domain prefix for Cognito Hosted UI (will be suffixed with -env) | `string` | n/a | yes |
 | <a name="input_enable_apple_signin"></a> [enable\_apple\_signin](#input\_enable\_apple\_signin) | Enable Sign in with Apple | `bool` | `false` | no |
 | <a name="input_enable_google_signin"></a> [enable\_google\_signin](#input\_enable\_google\_signin) | Enable Sign in with Google | `bool` | `false` | no |
