@@ -34,7 +34,9 @@ jobs:
 
   lint:
     needs: detect-changes
-    if: ${{ needs.detect-changes.outputs.modules-changed == 'true' }}
+    if: |
+      needs.detect-changes.outputs.modules-changed == 'true' ||
+      needs.detect-changes.outputs.stacks-changed != '[]'
     runs-on: ubuntu-latest
     steps:
       -
