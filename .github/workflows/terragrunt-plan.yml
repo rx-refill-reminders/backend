@@ -61,6 +61,8 @@ jobs:
       -
         name: terragrunt plan
         uses: ./.github/actions/tg-command
+        env:
+          TG_LOG_CUSTOM_FORMAT: '%level %prefix %msg'
         with:
           working-directory: ${{ inputs.STACKS_DIR }}/${{ matrix.STACK }}
           command: stack run plan
