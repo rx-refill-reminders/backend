@@ -63,5 +63,5 @@ jobs:
         uses: ./.github/actions/tg-command
         with:
           working-directory: ${{ inputs.STACKS_DIR }}/${{ matrix.STACK }}
-          command: stack run plan --log-custom-format %level(suffix=" ")%prefix(path=short-relative,suffix=" ")%msg
+          command: stack run plan
           pr-comment: true
