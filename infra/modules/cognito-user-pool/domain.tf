@@ -41,14 +41,3 @@ resource "aws_route53_record" "custom_domain_alias" {
     evaluate_target_health = false
   }
 }
-
-resource "aws_cognito_user_pool_domain" "custom_domain" {
-  count = var.domain != null ? 1 : 0
-
-  domain       = var.domain.hostname
-  user_pool_id = aws_cognito_user_pool.pool.id
-
-  certificate_arn = module.custom_domain_cert[0].certificate_arn
-
-  depends_on = [ aws_route53_record.custom_domain_alias ]
-}
