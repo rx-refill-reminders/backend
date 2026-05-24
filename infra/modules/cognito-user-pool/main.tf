@@ -274,7 +274,7 @@ resource "aws_secretsmanager_secret_version" "service_client_secret" {
     client_id      = aws_cognito_user_pool_client.service[0].id
     client_secret  = aws_cognito_user_pool_client.service[0].client_secret
     user_pool_id   = aws_cognito_user_pool.pool.id
-    cognito_domain = aws_cognito_user_pool_domain.domain.domain
+    cognito_domain = aws_cognito_user_pool_domain.default_domain.domain
     token_endpoint = "${local.cognito_url}/oauth2/token"
   })
 }
