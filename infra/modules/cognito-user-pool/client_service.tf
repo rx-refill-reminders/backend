@@ -29,7 +29,7 @@ resource "aws_cognito_user_pool_client" "service" {
 resource "aws_secretsmanager_secret" "service_client_secret" {
   count = var.enable_service_client ? 1 : 0
 
-  name        = "cognito/${var.pool_name}/service-client-secret"
+  name        = "cognito/${var.pool_name}/client-secret/service"
   description = "Service client secret for ${var.pool_name}"
 }
 
