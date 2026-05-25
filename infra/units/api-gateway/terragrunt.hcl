@@ -16,7 +16,7 @@ dependencies {
 }
 
 terraform {
-  source = "${get_repo_root()}//infra/modules/api-gateway"
+  source = "git::github.com/rx-refill-reminders/terraform-modules//modules/api-gateway?ref=api-gateway%2Fv0&depth=0"
 }
 
 inputs = merge(

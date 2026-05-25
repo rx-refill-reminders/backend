@@ -16,7 +16,7 @@ dependencies {
 }
 
 terraform {
-  source = "${get_repo_root()}//infra/modules/cognito-user-pool"
+  source = "git::github.com/rx-refill-reminders/terraform-modules//modules/cognito-user-pool?ref=cognito-user-pool%2Fv0&depth=0"
 }
 
 inputs = merge(
