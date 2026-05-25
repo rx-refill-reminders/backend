@@ -72,3 +72,12 @@ unit "api_gateway" {
     }
   }
 }
+
+unit "lambda_role" {
+  source = "${get_repo_root()}/infra/units/lambda-role"
+  path   = "lambda-role"
+
+  values = {
+    role_name_prefix = "lambda-api"
+  }
+}
