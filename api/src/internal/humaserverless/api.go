@@ -29,9 +29,6 @@ type ApiOpts struct {
 
 	Servers []*huma.Server
 
-	ServerEnv string
-	ServerURL string
-
 	OAuth2 *OAuth2Opts
 }
 
@@ -59,9 +56,7 @@ func NewServerless(opts ApiOpts) huma.API {
 
 	api := humachi.New(router, config)
 
-	if opts.ServerURL != "" {
-		api.OpenAPI().Servers = opts.Servers
-	}
+	api.OpenAPI().Servers = opts.Servers
 
 	// Add OAuth 2.0 security scheme if Cognito domain is provided
 	if opts.OAuth2 != nil {

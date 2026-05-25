@@ -19,5 +19,5 @@ concurrency:
 jobs:
 
   pr:
-    uses: rx-refill-reminders/pipeline/.github/workflows/pr.yml@pr/v0
+    uses: rx-refill-reminders/pipeline/.github/workflows/pr.yml@handler-pr
     secrets: inherit
