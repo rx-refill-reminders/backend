@@ -51,6 +51,6 @@ jobs:
         uses: actions/checkout@v6
       -
         name: Emit PR ready check
-        uses: ./.github/actions/pr-ready
+        uses: rx-refill-reminders/pipeline/.github/actions/pr-ready@pr-ready/v0
         with:
           needs: ${{ toJSON(needs) }}

@@ -1,6 +1,6 @@
 name: terragrunt-unlock
 
-run-name: "Unlock ${{ inputs.S3_LOCKFILE }}"
+run-name: "Unlock ${{ inputs.STACK }}/${{ inputs.UNIT }}"
 
 on:
 
@@ -26,32 +26,7 @@ defaults:
 jobs:
 
   unlock:
-    runs-on: ubuntu-latest
-    steps:
-      -
-        uses: actions/checkout@v6
-      -
-        name: Get stack info
-        id: stack-info
-        uses: ./.github/actions/tg-stack-info
-        with:
-          INFO_FILE: infra/stacks/${{ inputs.STACK }}/stack.yml
-      -
-        name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v6
-        with:
-          role-to-assume: ${{ steps.stack-info.outputs.assume-role-arn }}
-          aws-region: us-east-1
-      -
-        name: Delete S3 lockfile
-        env:
-          STATES_BUCKET: ${{ steps.stack-info.outputs.states-bucket }}
-          LOCKFILE_KEY: stacks/${{ inputs.STACK }}/.terragrunt-stack/${{ inputs.UNIT }}/terraform.tfstate.tflock
-        run: |
-          LOCKFILE_KEY="${LOCKFILE_KEY#/}"
-          LOCKFILE_URI="s3://${STATES_BUCKET}/${LOCKFILE_KEY}"
-
-          echo "Deleting lockfile: ${LOCKFILE_URI}"
-          aws s3 rm "${LOCKFILE_URI}"
-
-          echo "Deleted \`${LOCKFILE_URI}\`" >> "$GITHUB_STEP_SUMMARY"
+    uses: rx-refill-reminders/pipeline/.github/workflows/terragrunt-unlock.yml@terragrunt-unlock/v0
+    with:
+      STACK: ${{ inputs.STACK }}
+      UNIT: ${{ inputs.UNIT }}
