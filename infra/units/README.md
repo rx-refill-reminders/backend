@@ -6,3 +6,5 @@ Terragrunt unit templates — referenced by `source` in each stack’s `terragru
 |------|--------|
 | `dns-hosted-zone` | [`modules/dns-hosted-zone`](../modules/dns-hosted-zone) |
 | `cognito-user-pool` | [`modules/cognito-user-pool`](../modules/cognito-user-pool) |
+| `api-gateway` | [`modules/api-gateway`](../modules/api-gateway) |
+| `lambda-role` | [`lambda-role`](https://github.com/rx-refill-reminders/terraform-modules/tree/main/modules/lambda-role) |
