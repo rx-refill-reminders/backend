@@ -3,7 +3,7 @@ include "root" {
 }
 
 terraform {
-  source = "${get_repo_root()}//infra/modules/dns-hosted-zone"
+  source = "git::github.com/rx-refill-reminders/terraform-modules//modules/dns-hosted-zone?ref=dns-hosted-zone%2Fv0&depth=0"
 }
 
 inputs = values
