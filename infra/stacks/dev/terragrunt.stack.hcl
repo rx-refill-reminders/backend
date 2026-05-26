@@ -70,3 +70,18 @@ unit "lambda_role" {
     role_name = "backend-api-lambda"
   }
 }
+
+unit "api_gateway_routes" {
+  source = "${get_repo_root()}/infra/units/api-gateway-routes"
+  path   = "api-gateway-routes"
+
+  values = {
+    endpoints = [
+      {
+        route                 = "/{proxy+}"
+        method                = "ANY"
+        handler_function_name = "backend-api-handler"
+      },
+    ]
+  }
+}
