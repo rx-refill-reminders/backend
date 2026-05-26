@@ -11,7 +11,7 @@ unit "lambda_function" {
     handler         = "bootstrap"
     dist_path       = "${get_repo_root()}/api/src/dist"
     code_bucket_id  = local.stack_config["code-bucket-id"]
-    role_arn        = local.stack_config["role-arn"]
+    role_arn        = "arn:aws:iam::339284817422:role/lambda-api"
     runtime         = "provided.al2023"
     timeout_seconds = 30
   }
