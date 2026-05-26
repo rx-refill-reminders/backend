@@ -7,13 +7,13 @@ terraform {
 }
 
 inputs = {
-  function_name   = "backend-api-handler"
-  handler         = "bootstrap"
-  executable_zip  = "${get_repo_root()}/api/src/dist/api.zip"
-  
+  function_name  = "backend-api-handler"
+  handler        = "bootstrap"
+  executable_zip = "${get_repo_root()}/api/src/dist/api.zip"
+
   runtime         = "provided.al2023"
   timeout_seconds = 30
-  
-  code_bucket_id  = values.code_bucket_id
-  role_arn        = values.role_arn
+
+  code_bucket_id = values.code_bucket_id
+  role_arn       = values.role_arn
 }

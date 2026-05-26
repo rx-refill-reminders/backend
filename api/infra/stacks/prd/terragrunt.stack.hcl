@@ -7,7 +7,7 @@ unit "lambda_function" {
   path   = "lambda-function"
 
   values = {
-    code_bucket_id  = "lambda-source-code-104875668206-us-east-1-an"
-    role_arn        = "arn:aws:iam::104875668206:role/backend-api-lambda"
+    code_bucket_id = "lambda-source-code-104875668206-us-east-1-an"
+    role_arn       = "arn:aws:iam::104875668206:role/backend-api-lambda"
   }
 }
