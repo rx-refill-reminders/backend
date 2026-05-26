@@ -7,7 +7,7 @@ unit "lambda_function" {
   path   = "lambda-function"
 
   values = {
-    function_name   = "api"
+    function_name   = "backend-api-handler"
     handler         = "bootstrap"
     dist_path       = "${get_repo_root()}/api/src/dist"
     code_bucket_id  = "lambda-source-code-104875668206-us-east-1-an"
