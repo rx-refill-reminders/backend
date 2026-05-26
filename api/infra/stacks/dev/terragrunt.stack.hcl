@@ -11,7 +11,7 @@ unit "lambda_function" {
     handler         = "bootstrap"
     dist_path       = "${get_repo_root()}/api/src/dist"
     code_bucket_id  = "lambda-source-code-339284817422-us-east-1-an"
-    role_arn        = "arn:aws:iam::339284817422:role/lambda-api"
+    role_arn        = "arn:aws:iam::339284817422:role/backend-api-lambda"
     runtime         = "provided.al2023"
     timeout_seconds = 30
   }
