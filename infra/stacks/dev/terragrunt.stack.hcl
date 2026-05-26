@@ -78,6 +78,21 @@ unit "api_gateway_routes" {
   values = {
     endpoints = [
       {
+        route                 = "/openapi.yaml"
+        method                = "GET"
+        handler_function_name = "backend-api-handler"
+      },
+      {
+        route                 = "/openapi.json"
+        method                = "GET"
+        handler_function_name = "backend-api-handler"
+      },
+      {
+        route                 = "/docs"
+        method                = "GET"
+        handler_function_name = "backend-api-handler"
+      },
+      {
         route                 = "/{proxy+}"
         method                = "ANY"
         handler_function_name = "backend-api-handler"

@@ -100,7 +100,7 @@ unit "api_gateway_routes" {
       },
       {
         route                 = "/docs"
-        method                = "ANY"
+        method                = "GET"
         handler_function_name = "backend-api-handler"
       },
       {
