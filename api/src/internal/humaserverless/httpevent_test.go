@@ -24,7 +24,8 @@ func TestEventToRequest(t *testing.T) {
 			},
 			RequestContext: events.APIGatewayV2HTTPRequestContext{
 				HTTP: events.APIGatewayV2HTTPRequestContextHTTPDescription{
-					Path: "/api/users",
+					Method: "GET",
+					Path:   "/api/users",
 				},
 			},
 		}
@@ -49,7 +50,8 @@ func TestEventToRequest(t *testing.T) {
 			},
 			RequestContext: events.APIGatewayV2HTTPRequestContext{
 				HTTP: events.APIGatewayV2HTTPRequestContextHTTPDescription{
-					Path: "/api/users",
+					Method: "POST",
+					Path:   "/api/users",
 				},
 			},
 		}
@@ -72,7 +74,8 @@ func TestEventToRequest(t *testing.T) {
 			RequestContext: events.APIGatewayV2HTTPRequestContext{
 				Stage: "prod",
 				HTTP: events.APIGatewayV2HTTPRequestContextHTTPDescription{
-					Path: "/api/users",
+					Method: "GET",
+					Path:   "/api/users",
 				},
 			},
 		}
@@ -92,7 +95,8 @@ func TestEventToRequest(t *testing.T) {
 			Headers:        map[string]string{},
 			RequestContext: events.APIGatewayV2HTTPRequestContext{
 				HTTP: events.APIGatewayV2HTTPRequestContextHTTPDescription{
-					Path: "/api/users?limit=10&offset=20",
+					Method: "GET",
+					Path:   "/api/users?limit=10&offset=20",
 				},
 			},
 		}
@@ -117,7 +121,8 @@ func TestEventToRequest(t *testing.T) {
 			},
 			RequestContext: events.APIGatewayV2HTTPRequestContext{
 				HTTP: events.APIGatewayV2HTTPRequestContextHTTPDescription{
-					Path: "/api/users",
+					Method: "GET",
+					Path:   "/api/users",
 				},
 			},
 		}
@@ -142,7 +147,8 @@ func TestEventToRequest(t *testing.T) {
 			},
 			RequestContext: events.APIGatewayV2HTTPRequestContext{
 				HTTP: events.APIGatewayV2HTTPRequestContextHTTPDescription{
-					Path: "/api/users/123",
+					Method: "PUT",
+					Path:   "/api/users/123",
 				},
 			},
 		}
@@ -163,7 +169,8 @@ func TestEventToRequest(t *testing.T) {
 			Headers:        map[string]string{},
 			RequestContext: events.APIGatewayV2HTTPRequestContext{
 				HTTP: events.APIGatewayV2HTTPRequestContextHTTPDescription{
-					Path: "/api/users/123",
+					Method: "DELETE",
+					Path:   "/api/users/123",
 				},
 			},
 		}
@@ -186,7 +193,8 @@ func TestEventToRequest(t *testing.T) {
 			},
 			RequestContext: events.APIGatewayV2HTTPRequestContext{
 				HTTP: events.APIGatewayV2HTTPRequestContextHTTPDescription{
-					Path: "/api/users/123",
+					Method: "PATCH",
+					Path:   "/api/users/123",
 				},
 			},
 		}
@@ -206,7 +214,8 @@ func TestEventToRequest(t *testing.T) {
 			Headers:        map[string]string{},
 			RequestContext: events.APIGatewayV2HTTPRequestContext{
 				HTTP: events.APIGatewayV2HTTPRequestContextHTTPDescription{
-					Path: "/api/users",
+					Method: "GET",
+					Path:   "/api/users",
 				},
 			},
 		}
@@ -227,7 +236,8 @@ func TestEventToRequest(t *testing.T) {
 			Headers:        map[string]string{},
 			RequestContext: events.APIGatewayV2HTTPRequestContext{
 				HTTP: events.APIGatewayV2HTTPRequestContextHTTPDescription{
-					Path: "/",
+					Method: "GET",
+					Path:   "/",
 				},
 			},
 		}
@@ -247,7 +257,8 @@ func TestEventToRequest(t *testing.T) {
 			Headers:        map[string]string{},
 			RequestContext: events.APIGatewayV2HTTPRequestContext{
 				HTTP: events.APIGatewayV2HTTPRequestContextHTTPDescription{
-					Path: "/api/v1/users/123/posts/456",
+					Method: "GET",
+					Path:   "/api/v1/users/123/posts/456",
 				},
 			},
 		}
