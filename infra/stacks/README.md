@@ -20,7 +20,7 @@ terragrunt stack run plan    # generate + plan
 terragrunt stack run apply
 ```
 
-State keys: `prd/.terragrunt-stack/dns-hosted-zone/terraform.tfstate` (relative to `root.hcl`).
+State keys: `prd/.terragrunt-stack/dns-hosted-zone/terraform.tfstate` (relative to `root.hcl`). DynamoDB units use paths such as `dynamodb-users`, `dynamodb-rx-cycles`, `dynamodb-rx-cycle-instances`, and `dynamodb-reminders`.
 
 ## Adding a unit
 
