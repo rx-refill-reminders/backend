@@ -12,8 +12,7 @@ import (
 
 // Convert the API Gateway event into a HTTP request
 func EventToRequest(event events.APIGatewayV2HTTPRequest) (*http.Request, error) {
-	routePieces := strings.Split(event.RouteKey, " ")
-	httpMethod := routePieces[0]
+	httpMethod := event.RequestContext.HTTP.Method
 
 	body := strings.NewReader(event.Body)
 
