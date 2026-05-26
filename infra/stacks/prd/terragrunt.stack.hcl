@@ -78,6 +78,6 @@ unit "lambda_role" {
   path   = "lambda-role"
 
   values = {
-    role_name = "lambda-api"
+    role_name = "backend-api-lambda"
   }
 }
