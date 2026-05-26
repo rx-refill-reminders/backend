@@ -17,7 +17,7 @@ dependencies {
 }
 
 terraform {
-  source = "git::github.com/rx-refill-reminders/terraform-modules//modules/api-gateway-routes?ref=api-gateway-routes%2Fv0&depth=0"
+  source = "git::github.com/rx-refill-reminders/terraform-modules//modules/api-gateway-routes?ref=routes-module"
 }
 
 inputs = merge(
