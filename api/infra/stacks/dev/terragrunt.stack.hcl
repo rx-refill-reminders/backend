@@ -7,12 +7,7 @@ unit "lambda_function" {
   path   = "lambda-function"
 
   values = {
-    function_name   = "backend-api-handler"
-    handler         = "bootstrap"
-    executable_zip  = "${get_repo_root()}/api/src/dist/api.zip"
     code_bucket_id  = "lambda-source-code-339284817422-us-east-1-an"
     role_arn        = "arn:aws:iam::339284817422:role/backend-api-lambda"
-    runtime         = "provided.al2023"
-    timeout_seconds = 30
   }
 }
