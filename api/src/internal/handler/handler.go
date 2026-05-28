@@ -33,7 +33,8 @@ func NewHandler(cfg envconfig.Config) Handler {
 	}
 
 	h.API = humaserverless.NewServerless(humaserverless.ApiOpts{
-		Version: "TODO",
+		Name:    "Rx Refill Reminders Backend API",
+		Version: "undefined",
 
 		Servers: []*huma.Server{
 			{

@@ -15,13 +15,6 @@ import (
 	"github.com/go-chi/chi/v5"
 )
 
-const (
-	ApiName        = "WandererTrip API"
-	DefaultVersion = "local"
-
-	SecurityOAuth = "OAuth2"
-)
-
 type ApiOpts struct {
 	Name string
 
@@ -46,12 +39,12 @@ type OAuth2AutoConfig struct {
 
 func NewServerless(opts ApiOpts) huma.API {
 	if opts.Version == "" {
-		opts.Version = DefaultVersion
+		opts.Version = "undefined"
 	}
 
 	router := chi.NewMux()
 
-	config := huma.DefaultConfig(ApiName, opts.Version)
+	config := huma.DefaultConfig(opts.Name, opts.Version)
 	config.CreateHooks = nil
 
 	api := humachi.New(router, config)
