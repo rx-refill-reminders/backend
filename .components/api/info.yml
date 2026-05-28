@@ -1,5 +1,5 @@
 path: api
 component: api
-type: api-handler
+type: lambda
 
 language: go
