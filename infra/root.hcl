@@ -12,7 +12,7 @@ remote_state {
 
   config = {
     bucket       = local.stack["states-bucket"]
-    key          = "${project}/${component}/${path_relative_to_include()}/terraform.tfstate"
+    key          = "${local.project}/${local.component}/${path_relative_to_include()}/terraform.tfstate"
     region       = "us-east-1"
     encrypt      = true
     use_lockfile = true
