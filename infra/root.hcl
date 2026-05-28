@@ -5,6 +5,10 @@ locals {
 
   project   = get_env("PIPELINE_PROJECT")
   component = get_env("PIPELINE_COMPONENT")
+  
+  providers_file_path    = try(find_in_parent_folders("providers.tf"), "")
+  providers_file_exists  = local.providers_file_path != ""
+  providers_file_content = local.providers_file_exists ? file(local.providers_file_path) : ""
 }
 
 remote_state {
@@ -25,12 +29,8 @@ remote_state {
 }
 
 generate "provider" {
-  path      = "provider.tf"
-  if_exists = "overwrite_terragrunt"
-
-  contents = <<EOF
-provider "aws" {
-  region = "us-east-1"
-}
-EOF
+  path      = "providers.tf"
+  if_exists = "skip"
+  disable   = !local.providers_file_exists
+  contents  = local.providers_file_content
 }
