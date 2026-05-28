@@ -2,6 +2,9 @@
 
 locals {
   stack = yamldecode(file(find_in_parent_folders("stack.yml")))
+
+  project   = get_env("PIPELINE_PROJECT")
+  component = get_env("PIPELINE_COMPONENT")
 }
 
 remote_state {
@@ -9,7 +12,7 @@ remote_state {
 
   config = {
     bucket       = local.stack["states-bucket"]
-    key          = "${path_relative_to_include()}/terraform.tfstate"
+    key          = "${project}/${component}/${path_relative_to_include()}/terraform.tfstate"
     region       = "us-east-1"
     encrypt      = true
     use_lockfile = true
