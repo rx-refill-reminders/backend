@@ -111,3 +111,69 @@ unit "api_gateway_routes" {
     ]
   }
 }
+
+unit "dynamodb_users" {
+  source = "${get_repo_root()}/infra/units/dynamodb-table"
+  path   = "dynamodb-users"
+
+  values = {
+    table_name = "users"
+    hash_key   = "userId"
+    attributes = [
+      { name = "userId", type = "S" },
+    ]
+  }
+}
+
+unit "dynamodb_rx_cycles" {
+  source = "${get_repo_root()}/infra/units/dynamodb-table"
+  path   = "dynamodb-rx-cycles"
+
+  values = {
+    table_name = "rx-cycles"
+    hash_key   = "userId"
+    range_key  = "cycleId"
+    attributes = [
+      { name = "userId", type = "S" },
+      { name = "cycleId", type = "S" },
+    ]
+  }
+}
+
+unit "dynamodb_rx_cycle_instances" {
+  source = "${get_repo_root()}/infra/units/dynamodb-table"
+  path   = "dynamodb-rx-cycle-instances"
+
+  values = {
+    table_name = "rx-cycle-instances"
+    hash_key   = "cycleId"
+    range_key  = "instanceId"
+    attributes = [
+      { name = "cycleId", type = "S" },
+      { name = "instanceId", type = "S" },
+    ]
+  }
+}
+
+unit "dynamodb_reminders" {
+  source = "${get_repo_root()}/infra/units/dynamodb-table"
+  path   = "dynamodb-reminders"
+
+  values = {
+    table_name = "reminders"
+    hash_key   = "reminderId"
+    attributes = [
+      { name = "reminderId", type = "S" },
+      { name = "status", type = "S" },
+      { name = "scheduledAt", type = "N" },
+    ]
+    global_secondary_index_map = [
+      {
+        name            = "by-schedule"
+        hash_key        = "status"
+        range_key       = "scheduledAt"
+        projection_type = "ALL"
+      },
+    ]
+  }
+}
