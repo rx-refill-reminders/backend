@@ -5,7 +5,7 @@ import (
 
 	"github.com/danielgtaylor/huma/v2"
 	"github.com/rx-refill-reminders/backend/api/src/internal/envconfig"
-	"github.com/rx-refill-reminders/backend/api/src/internal/humaserverless"
+	"github.com/rx-refill-reminders/lambda-go/humaserverless"
 )
 
 type Handler interface {

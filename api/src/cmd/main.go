@@ -8,8 +8,8 @@ import (
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-lambda-go/lambda"
 	"github.com/rx-refill-reminders/backend/api/src/internal/handler"
-	"github.com/rx-refill-reminders/backend/api/src/internal/humaserverless"
-	"github.com/rx-refill-reminders/backend/api/src/internal/middleware"
+	"github.com/rx-refill-reminders/lambda-go/humaserverless"
+	"github.com/rx-refill-reminders/lambda-go/middleware"
 )
 
 // Run handles an API Gateway request by dispatching to the pre-built API.
