@@ -3,3 +3,6 @@ component: api
 type: lambda
 
 language: go
+
+src-path: src
+infra-path: infra
