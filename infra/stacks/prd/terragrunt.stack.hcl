@@ -1,5 +1,6 @@
 locals {
-  domain = "rx-refill-reminders.com"
+  hosted_zone_id = "Z07465232HRS85ZSQYRZY"
+  domain         = "rx-refill-reminders.com"
 }
 
 unit "api_gateway" {
@@ -10,7 +11,8 @@ unit "api_gateway" {
     name = "api"
 
     domain = {
-      hostname = "api.${local.domain}"
+      hosted_zone_id = local.hosted_zone_id
+      hostname       = "api.${local.domain}"
     }
   }
 }
