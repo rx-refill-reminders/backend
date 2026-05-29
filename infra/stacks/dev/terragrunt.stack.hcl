@@ -1,12 +1,5 @@
 locals {
   domain = "dev.rx-refill-reminders.com"
-
-  cognito_resource_server_scopes = [
-    {
-      name        = "access"
-      description = "Full API access"
-    },
-  ]
 }
 
 unit "dns_hosted_zone" {
@@ -16,36 +9,6 @@ unit "dns_hosted_zone" {
   values = {
     domain   = local.domain
     validate = true
-  }
-}
-
-unit "cognito_user_pool" {
-  source = "${get_repo_root()}/infra/units/cognito-user-pool"
-  path   = "cognito-user-pool"
-
-  values = {
-    pool_name                  = "rx-refill-reminders"
-    app_client_name            = "rx-refill-reminders"
-    domain_prefix              = "rx-refill-reminders-dev"
-    resource_server_identifier = "https://api.${local.domain}"
-    resource_server_name       = "Rx Refill Reminders API"
-    resource_server_scopes     = local.cognito_resource_server_scopes
-
-    ios_callback_urls = [
-      "rxrefillreminders://callback",
-    ]
-    ios_logout_urls = [
-      "rxrefillreminders://logout",
-    ]
-
-    enable_web_client     = false
-    enable_service_client = true
-    enable_apple_signin   = false
-    enable_google_signin  = false
-
-    domain = {
-      hostname = "auth.${local.domain}"
-    }
   }
 }
 
@@ -97,19 +60,6 @@ unit "api_gateway_routes" {
         method                = "ANY"
         handler_function_name = "backend-api-handler"
       },
-    ]
-  }
-}
-
-unit "dynamodb_users" {
-  source = "${get_repo_root()}/infra/units/dynamodb-table"
-  path   = "dynamodb-users"
-
-  values = {
-    table_name = "users"
-    hash_key   = "userId"
-    attributes = [
-      { name = "userId", type = "S" },
     ]
   }
 }
