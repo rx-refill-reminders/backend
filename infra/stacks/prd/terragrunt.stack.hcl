@@ -11,8 +11,8 @@ unit "api_gateway" {
     name = "api"
 
     domain = {
-      zone_id        = local.hosted_zone_id
-      hostname       = "api.${local.domain}"
+      zone_id  = local.hosted_zone_id
+      hostname = "api.${local.domain}"
     }
   }
 }
