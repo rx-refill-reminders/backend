@@ -3,7 +3,7 @@ include "root" {
 }
 
 terraform {
-  source = "git::github.com/rx-refill-reminders/terraform-modules//modules/api-gateway?ref=api-gateway%2Fv0&depth=0"
+  source = "git::github.com/rx-refill-reminders/terraform-modules//modules/api-gateway?ref=gateway-fix-2&depth=0"
 }
 
 inputs = values

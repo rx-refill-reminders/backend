@@ -11,8 +11,9 @@ unit "api_gateway" {
     name = "api"
 
     domain = {
-      zone_id  = local.hosted_zone_id
-      hostname = "api.${local.domain}"
+      zone_id         = local.hosted_zone_id
+      hostname        = "api.${local.domain}"
+      certificate_arn = "arn:aws:acm:us-east-1:339284817422:certificate/3ef26155-8494-4789-bae2-52d8299aa384"
     }
   }
 }
