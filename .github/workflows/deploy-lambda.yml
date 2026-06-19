@@ -54,7 +54,7 @@ jobs:
       NEXT_ENVIRONMENT: ${{ steps.parse-deployment-sequence.outputs.NEXT_ENVIRONMENT }}
     steps:
       -
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
       -
         name: Parse repository_dispatch payload
         id: parse-dispatch-event
@@ -91,7 +91,7 @@ jobs:
     if: ${{ needs.parse-deployment-info.outputs.SEQUENCE_DONE == 'true' }}
     steps:
       -
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
       -
         uses: slingshot-pipelines/action-promote-prerelease@v0
         with:
@@ -117,7 +117,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       -
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           ref: ${{ needs.parse-deployment-info.outputs.TAG }}
       -
